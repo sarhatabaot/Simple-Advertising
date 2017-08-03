@@ -1,0 +1,23 @@
+main: com.SimpleAd.MoshuAd.Ad
+version: 1.6
+name: SimpleAdvertising
+author: Moshu
+
+commands:
+  ad:
+    description: Make an ad on the chat.
+  adreload:
+    description: Reloads the plugin
+  date:
+    description: Allows you to see the time
+permissions:
+  simplead.*:
+    default: op
+    description: Give players with op everything by default
+  simplead.reload:
+    default: op
+  simplead.datecheck:
+    default: op
+
+#Made by Moshu with help from MosLaDatorie.
+# Version 1.6

@@ -1,0 +1,62 @@
+#Atention! Always use quotes or you'll break the plugin.
+
+#Quotes are these: " "
+
+#Everything supports Color Codes
+
+#Made By Moshu
+
+#Config Version: 1.6
+
+#My Server: mc.b-zone.ro
+
+#Skype for info: edward.nanescu
+
+#Plugin version: 1.6
+
+#To-do: Add BungeeCord support, coming soon.
+#For numbers like on the 'price' and 'cooldown' fields do not use quotas.
+
+#-----------------------(Start of the config)-----------------------------#
+
+
+prefix: "&fSimpleAd &b> "
+#Sets the prefix before the ad
+price: 100
+#Sets the tax for when a player uses /ad
+succes: "&f> &aYour Ad was placed for "
+#Sets the succes transaction message
+bizbal: 0
+#Do not touch bizbal, it's irelevant, but it helps the plugin work
+failure: "&cYou don't have enough money."
+#Failure message because you don't have enough money
+nomessage: "&cYou need to write something"
+#Failure message because you didn't write anything
+aftermessage: " &bContact: "
+#Displays string after the message  you input
+messagecolor: "&f"
+#The color the message is displayed in
+aftermoney: "$"
+#The symbol shown after the price you've paid
+reloadName: "SimpleAd"
+#The name that shows when reloaded
+reloadPhrase: "has Reloaded"
+#The phrase after author's name
+authorColor: "&a"
+#The color the author has
+noPermissionMessage: "&cYou don't have permission!"
+#The message for when the player doesn't have permission
+cooldownMessage: "&cYou need to wait &f30 &cseconds to use this again!"
+#Error message for the cooldownMessage
+cooldown: 240
+#Time in ticks for the cooldown
+logging: false
+#--------------------( Time Feature )-------------------------#
+
+TimeNoPermission: "&cYou don't have permission to see the time"
+#The no permission message for the time feature
+
+#---------------(Author)------------------#
+
+# Made by Moshu with help from MosLaDatorie.
+# Version 1.6
