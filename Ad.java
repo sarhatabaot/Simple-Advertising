@@ -1,56 +1,53 @@
+
+//ATTENTION! THE FOLLOWING CODE IS NOT WORKING PROPERLY
+
 package com.SimpleAd.MoshuAd;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.logging.Logger;
 
+import org.black_ixx.playerpoints.PlayerPoints;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.plugin.messaging.PluginMessageListener;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.command.CommandExecutor;
 import com.earth2me.essentials.Essentials;
-import com.google.common.collect.Iterables;
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
-import com.google.common.io.ByteStreams;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
+import me.clip.placeholderapi.PlaceholderAPI;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
-
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
-import ru.tehkode.permissions.bukkit.PermissionsEx;
+import com.SimpleAd.MoshuAd.DateClass;
+import com.SimpleAd.MoshuAd.Broadcast;
+import com.SimpleAd.MoshuAd.Title;
+import com.SimpleAd.MoshuAd.Points;
 
 import org.bukkit.plugin.Plugin;
 
 
-public class Ad extends JavaPlugin 
+public class Ad extends JavaPlugin implements Listener, CommandExecutor
 
 
 
 { 
 	        public static Plugin plugin;
-	        public static ReloadCommand ReloadCommand;
 		    Economy econ;
 	        int price;	  	   
 	        double bizprice;
@@ -71,7 +68,7 @@ public class Ad extends JavaPlugin
             int cdint;
             String TNP;
             Date date = new Date();
-			SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy / HH:mm:ss");
+        	SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy / HH:mm:ss");
 			String you;
 			String afterYou;
 			String msgColor;
@@ -80,9 +77,23 @@ public class Ad extends JavaPlugin
 			String nopermMsg;
 			String puncte;
 			String usage;
+			int points;
+			String pointssign;
+			String failurePoints;
+			String succesPoints;
+			String joinMessage;
 			
-            
-            
+			final FileConfiguration config = this.getConfig();
+			
+			String helpHeader;
+			String helpCommands;
+			String help1;
+			String help2;
+			String help3;
+			String help4;
+			String help5;
+			String help6;
+			String helpSpigot;
 
 	    public void Business() 
 	    { 
@@ -111,6 +122,20 @@ public class Ad extends JavaPlugin
                 this.nopermMsg = this.getConfig().getString("NoPermissionMessage");
                 this.puncte = this.getConfig().getString("separatorForMessage");
                 this.usage = this.getConfig().getString("usage");
+                this.points = this.getConfig().getInt("points");
+                this.pointssign = this.getConfig().getString("pointsName");
+                this.failurePoints = this.getConfig().getString("failurePoints");
+                this.succesPoints = this.getConfig().getString("succesPoints");
+                this.joinMessage = this.getConfig().getString("joinMessage");
+                this.help1 = this.getConfig().getString("helpCommand");
+                this.helpCommands = this.getConfig().getString("helpCommands");
+                this.helpHeader = this.getConfig().getString("helpHeader");
+                this.help2 = this.getConfig().getString("helpCommand2");
+                this.help3 = this.getConfig().getString("helpCommand3");
+                this.help4 = this.getConfig().getString("helpCommand4");
+                this.help5 = this.getConfig().getString("helpCommand5");
+                this.help6 = this.getConfig().getString("helpCommand6");
+                this.helpSpigot = this.getConfig().getString("helpSpigot");
 
 	    }
         
@@ -122,27 +147,55 @@ public class Ad extends JavaPlugin
 
 	        	logger.info(pdfFile.getName() + " was enabled! (Version " + pdfFile.getVersion() + ")");
                 System.out.println("Made By Moshu, this is the real deal!");
-	           	RegisteredServiceProvider rsp = this.getServer().getServicesManager().getRegistration(Economy.class);
-	              //new Bungee().Cacaness();
-	           	  econ = (Economy)rsp.getProvider();
-		          Business();
-                  createConfig();
-                  getCommand("adreload").setExecutor(new ReloadCommand());
-                  getCommand("date").setExecutor(new TimeClass());
-                  getCommand("msg").setExecutor(new Bungee());
-                  plugin = this;
-                  registerEvents(this, new ListenerClass()); 
-                  this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");                 
+	           	
+                RegisteredServiceProvider rsp = this.getServer().getServicesManager().getRegistration(Economy.class);
+	           	 
+                econ = (Economy)rsp.getProvider();
+		       
+                //Calling the methods
                  
+                  Business();
+                  createConfig();
+                  hookPlayerPoints();
+                  
+                //Get Commands   
+                 
+                  if(this.getConfig().getString("enableDate").equalsIgnoreCase("true"))
+                  {
+                  this.getCommand("date").setExecutor(new DateClass());
+                  } else {
+                	  logger.info("Date functionality disabled");
+                  }
+                 
+                  this.getCommand("adb").setExecutor(new Broadcast());
+                  this.getCommand("adt").setExecutor(new Title());
+                  this.getCommand("adp").setExecutor(new Points());
+                  
+                  //Looking for PlaceholderAPI                
+                  
+                  if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI"))
+                  {
+                	  Bukkit.getPluginManager().registerEvents(this, this);
+                	  logger.info("Hooked into PlaceholderAPI");
+                	  
+                  } else {
+                	  throw new RuntimeException("Could not hook into PlaceholderAPI. Sad");
+
+                  }
+                  
+                 
+                  if(this.getConfig().getString("usePlayerPoints").equalsIgnoreCase("true"))
+                  {
+                	  logger.info("Hooked into PlayerPoints");
+                  } else {
+                	  logger.info("Didn't hook into PlayerPoints");
+                  }
+                  
+                  
                   if (this.getConfig().getString("logging").equalsIgnoreCase("false")) {               	
                   logger.info("Logging is disabled");           
-                  }
+                  } 
                  
-                  if(this.getConfig().getString("bungeecordMsg").equalsIgnoreCase("true"))
-                  {
-                	  logger.info("BungeeCord Messaging enabled!");
-                	  logger.info("Turn to false if you want to message only on one server");
-                  }
 	}
 	
 
@@ -152,11 +205,152 @@ public class Ad extends JavaPlugin
 		Logger logger = getLogger();
 
 		logger.info(pdfFile.getName() + " was disabled! (Version " + pdfFile.getVersion() + ")");
-		 logToFile( format.format(date) + " - " +  " Plugin is disabling.");
+		 logToFile(format.format(date) + " - " +  " Plugin is disabling.");
 
 	}
 
-        private void createConfig() { //The creation of the config folder
+	//Hook for player points
+	
+	private PlayerPoints playerPoints;
+    Ad plugin123;
+	
+	private boolean hookPlayerPoints() {
+	    final Plugin plugin1 = plugin123.getServer().getPluginManager().getPlugin("PlayerPoints");
+	    playerPoints = PlayerPoints.class.cast(plugin1);
+	    if(plugin123 == null) 
+	    {
+	    	System.out.println("Plugin is not null");
+	    }
+	    if (plugin123.getConfig().getString("debug").equalsIgnoreCase("true"))
+	    		{
+	    	logToFile(format.format(date) + "DEBUG: PlayerPoints working fine.");
+	   
+	    }
+	    return playerPoints != null;
+	}
+
+	public PlayerPoints getPlayerPoints() {
+	    return playerPoints;
+	}
+	
+	
+	//Join Event for messages
+	@EventHandler (priority = EventPriority.HIGHEST)
+	public void onJoin(PlayerJoinEvent event)
+	{
+		
+		
+		if(this.getConfig().getString("toEveryone").equalsIgnoreCase("true"));
+		{
+		
+		for(Player all : Bukkit.getServer().getOnlinePlayers())
+		{
+			
+			String withoutPlaceholdersSet1 = this.joinMessage;
+			String PlaceholdersSet2 = PlaceholderAPI.setPlaceholders(event.getPlayer(), withoutPlaceholdersSet1);
+			String PlaceholdersSet = PlaceholderAPI.setPlaceholders(event.getPlayer(), PlaceholdersSet2);
+			all.sendMessage(ChatColor.translateAlternateColorCodes('&', PlaceholdersSet));
+		
+			
+			if(this.getConfig().getString("debug").equalsIgnoreCase("true"))
+        	{
+				logToFile(format.format(date) + "DEBUG: Join Message working (Sent to everyone)");
+        	}
+			   
+
+		}
+
+		
+	   if(this.getConfig().getString("toEveryone").equalsIgnoreCase("false"))
+	  {
+		
+		String noPlaceholdersSet = this.joinMessage;
+		String PlaceholdersSet = PlaceholderAPI.setPlaceholders(event.getPlayer(), noPlaceholdersSet);
+		event.setJoinMessage(ChatColor.translateAlternateColorCodes('&', PlaceholdersSet));
+		event.setJoinMessage(PlaceholdersSet);
+		
+		if(this.getConfig().getString("debug").equalsIgnoreCase("true"))
+    	{
+			logToFile(format.format(date) + "DEBUG: Join Message working (Sent to player)");
+    	}
+		
+		
+	  }
+	}
+	}
+			
+    
+	public boolean hasTime(Player player) {
+        if (player.hasPermission("simplead.datecheck")) {
+            return true;
+        } else if  (player.hasPermission("simplead.*")) {
+            return true;
+        }
+        return false;
+    }
+
+	//Reload Command
+	
+
+	        
+	         //The Permission
+	         
+	         public boolean hasReload(Player player) {
+	             if (player.hasPermission("simplead.reload")) {
+	                 return true;
+	             } else if  (player.hasPermission("simplead.*")) {
+	                 return true;
+	             }
+	             return false;
+	         }
+	         
+	         //Help Permission
+	         
+	         public boolean hasHelp(Player player) {
+	             if (player.hasPermission("simplead.help")) {
+	                 return true;
+	             } else if  (player.hasPermission("simplead.*")) {
+	                 return true;
+	             }
+	             return false;
+	         }
+
+	         //Permission for ad
+	         
+	         public boolean hasAd(Player player) {
+	             if (player.hasPermission("simplead.ad")) {
+	                 return true;
+	             } else if  (player.hasPermission("simplead.*")) {
+	                 return true;
+	             }
+	             return false;
+	         }	
+	
+	         //Permission for broadcast
+	         
+	         public boolean hasBc(Player player) {
+	             if (player.hasPermission("simplead.bc")) {
+	                 return true;
+	             } else if  (player.hasPermission("simplead.*")) {
+	                 return true;
+	             }
+	             return false;
+	         }	
+	         
+	         //Permission for titles
+	         
+	         public boolean hasTitle(Player player) {
+	             if (player.hasPermission("simplead.adt")) {
+	                 return true;
+	             } else if  (player.hasPermission("simplead.*")) {
+	                 return true;
+	             }
+	             return false;
+	         }	
+	
+	//Creation of Config
+	
+        private void createConfig() { 
     try {
         if (!getDataFolder().exists()) {
             getDataFolder().mkdirs();
@@ -174,26 +368,8 @@ public class Ad extends JavaPlugin
     }
 
 }
-    public class TimeClass implements CommandExecutor {  
-        public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) 
-        {
-    		if (cmd.getName().equalsIgnoreCase("date") && sender.hasPermission("simplead.datecheck")) 
-    		{    
-    			sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7The time: &a" + format.format(date)));	
-            	logToFile( format.format(date) + " - "  + sender.getName() + " viewed the date.");
-				    						
-    			} else 
-    			{
-    				Player p = (Player) sender;
-    				p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cYou don't have permission to view the date"));
-                	logToFile( format.format(date) + " - " + "Warn > " + sender.getName() + " tried to view the date, but didn't have permission.");
-    				
-    			}
-    		return true;
-        }
-    }
-    
-   
+
+   //Creation of log file
     
         public void logToFile(String message)
         
@@ -234,15 +410,8 @@ public class Ad extends JavaPlugin
             }
      
         }
-
-
-        public void registerEvents(org.bukkit.plugin.Plugin plugin, ListenerClass...ListenerClass ) { 
-        	
-            for (ListenerClass listener : ListenerClass) {
-                Bukkit.getServer().getPluginManager(); 
-            }
-        }
-      
+        //The main command
+        
 	 @SuppressWarnings("unused")
 	private boolean setupEconomy()  //Aici fac economia
 	 {
@@ -261,91 +430,80 @@ public class Ad extends JavaPlugin
 	        return false;
 	 } 
 	 
+	 //ArrayList for cooldowns
 	 
 	 ArrayList<Player> cooldown = new ArrayList<Player>();
 	
+	 //Listener Class
 	 
-	 public class ListenerClass implements Listener { //Aici e clasa de Listener
-		 		 		 
+	 public boolean hasBroadcast(Player player) {
+         if (player.hasPermission("simplead.bc")) {
+             return true;
+         } else if  (player.hasPermission("simplead.*")) {
+             return true;
+         }
+         return false;
 	 }
-	 
-	 class ReloadCommand implements CommandExecutor {  //Clasa de ReloadCommand ca sa mearga onCommand
-	          
-         public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args){
-        
-        	 if(cmd.getName().equalsIgnoreCase("adreload")) {
-                 if (args.length > 0) {
-                     sender.sendMessage(ChatColor.RED + "To many arguments."); 
-                     return false;
-                 }
-                 if (sender instanceof Player) {
-                     Player player = (Player)sender;
-                     if (hasReload(player)) {
-                    	 plugin.getPluginLoader().disablePlugin(plugin); //Alta eroare
-                         plugin.getPluginLoader().enablePlugin(plugin);
-                    	 plugin.reloadConfig();
-                         sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&f &aSimple Advertising (By Moshu) 1.5 was reloaded!"));
-                         logToFile( format.format(date) + " - " + "Reload > " +  sender.getName() + " has reloaded the plugin.");
-                     } else {
-                         sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&f> &cYou don't have permission!"));
-                         logToFile( format.format(date) + " - " + "Reload > " +  sender.getName() + " tried to reload but didn't have permission");
-                         
-                     }
-                 } else {
-                	 plugin.getPluginLoader().disablePlugin(plugin);
-                     plugin.getPluginLoader().enablePlugin(plugin);
-                	 plugin.reloadConfig();
-                     sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&f &aSimple Advertising (By Moshu) 1.5 was reloaded!"));
-                     logToFile( format.format(date) + " - " + "Reload > " +  sender.getName() + " has reloaded the plugin.");
-                 
-                 
-                 }
-                 
-                 return false;
-             }
-             return false;
-         }
-      
-         public boolean hasReload(Player player) {
-             if (player.hasPermission("simplead.reload")) {
-                 return true;
-             } else if  (player.hasPermission("simplead.*")) {
-                 return true;
-             }
-             return false;
-         }
-     }
-	  
-	 public boolean hasTime(Player player) {
-         if (player.hasPermission("simplead.datecheck")) {
-             return true;
-         } else if  (player.hasPermission("simplead.*")) {
-             return true;
-         }
-         return false;
-     }
-	 
-	 public boolean hasBungee(Player player) {
-         if (player.hasPermission("simplead.pm")) {
-             return true;
-         } else if  (player.hasPermission("simplead.*")) {
-             return true;
-         }
-         return false;
-	 }	 
-  
-     @SuppressWarnings("deprecation")
+	
+     @SuppressWarnings("unused")
 	@Override
 	 public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) //Aci de /ad-ul, adica comanda initiala
-	{
-     
-    	 
-    	  	    	 
+	
+	 { 	     	 
     	int lungime = args.length;
 		Player player = (Player) sender;
         if (cmd.getName().equalsIgnoreCase("ad") && sender instanceof Player) 
-        	
         {
+        	
+        	logToFile(format.format(date) + "DEBUG: Main Command registering");
+        	//Help Command
+        	
+        	if(args[0].equalsIgnoreCase("help") && sender.hasPermission("simplead.help"))
+       	  {
+
+       		  sender.sendMessage(ChatColor.translateAlternateColorCodes('&', this.helpHeader));
+       		  sender.sendMessage(ChatColor.translateAlternateColorCodes('&', this.helpCommands));
+       		  sender.sendMessage(ChatColor.translateAlternateColorCodes('&', this.help1));
+       		  sender.sendMessage(ChatColor.translateAlternateColorCodes('&', this.help2));
+       		  sender.sendMessage(ChatColor.translateAlternateColorCodes('&', this.help3));
+       		  sender.sendMessage(ChatColor.translateAlternateColorCodes('&', this.help4));
+       		  sender.sendMessage(ChatColor.translateAlternateColorCodes('&', this.help5));
+       		  sender.sendMessage(ChatColor.translateAlternateColorCodes('&', this.help6));
+       		  sender.sendMessage(ChatColor.translateAlternateColorCodes('&', this.helpSpigot));
+       		  
+       	  }
+        	
+        	//Reload Command
+        	
+        	   if(args[0].equalsIgnoreCase("reload") && sender.hasPermission("simplead.reload"));
+               {
+              
+               	                         Player plaier = (Player)sender;
+               	                         if (hasReload(plaier)) {
+               	                        	 this.getPluginLoader().disablePlugin(this); 
+               	                        	 this.getPluginLoader().enablePlugin(this);
+               	                        	 this.saveDefaultConfig();
+               	                        	 this.reloadConfig();
+               	                 	         
+               	                 	        if (this == null)
+                                      		 {
+                                      	     System.out.println("Plugin is null");
+                                      		 }
+               	                 	        
+               	                         sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&f &aSimple Advertising (By Moshu) 1.7 was reloaded!"));
+               	                         logToFile(format.format(date) + " - " + "Reload > " +  sender.getName() + " has reloaded the plugin.");
+               	                      
+
+               	                     } else {
+               	                         sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&f> &cYou don't have permission!"));
+               	                         logToFile( format.format(date) + " - " + "Reload > " +  sender.getName() + " tried to reload but didn't have permission");
+
+               	                 
+               	                 }
+               	                 
+               	         
+               	         }
+               	      	
         	if (cooldown.contains(player)) 
         	{
             player.sendMessage(ChatColor.translateAlternateColorCodes('&', this.prefix + this.cd ));
@@ -353,7 +511,7 @@ public class Ad extends JavaPlugin
         
         }
         
-        	OfflinePlayer p2 = (OfflinePlayer) sender;        	
+            OfflinePlayer p2 = (OfflinePlayer) sender;        	
         	double b = (econ.getBalance(sender.getName()));
         	if(b < this.price)
         	{
@@ -363,15 +521,16 @@ public class Ad extends JavaPlugin
         		String strI = sb.toString();
         	    player.sendMessage(ChatColor.translateAlternateColorCodes('&', strI));
                 player.sendMessage(ChatColor.translateAlternateColorCodes('&', this.prefix + this.failure));
-            	logToFile( format.format(date) + " - " + "Warn > " + sender.getName() + " didn't have enough money.");
+            	logToFile(format.format(date) + " - " + "Warn > " + sender.getName() + " didn't have enough money.");
         
-            }
+            } 
 		
         	   @SuppressWarnings("deprecation")
+        	   
 			EconomyResponse r = econ.withdrawPlayer(sender.getName(), this.price);		
-                Player bahoi = (Player)sender;
+                Player bahoi2 = (Player)sender;
         	    int i = 0;    
-                if (r.transactionSuccess() && i < lungime  ) 
+                if (r.transactionSuccess() && 1 < lungime) 
                 {           
             	String mesaj = " ";
                 while (i < lungime) {
@@ -381,19 +540,22 @@ public class Ad extends JavaPlugin
                 mesaj = mesaj.trim();
                 for (@SuppressWarnings("unused") Player p : Bukkit.getOnlinePlayers()) {
                     p.sendMessage(ChatColor.translateAlternateColorCodes('&', this.prefix + this.mcolor + mesaj + this.contact + player.getName()));
-                    int s = this.price;
-                    int m = this.getConfig().getInt("bizbal");
-                    int muia = s + m;
-                    ++s;
-                    this.getConfig().set("bizbal", muia);
-                    logToFile( format.format(date) + " - " + mesaj + " . Made by: " + player.getName());
+            		String noPlaceholdersSet = this.joinMessage;
+            		String PlaceholdersSet = PlaceholderAPI.setPlaceholders(player, noPlaceholdersSet);
+                    logToFile(format.format(date) + " - " + mesaj + " . Made by: " + player.getName());
                 }
                 player.sendMessage(ChatColor.translateAlternateColorCodes('&', this.succes + this.price + this.dolar));
-                logToFile( format.format(date) + " - " + player.getName() + " has succesfully made an Ad." );
+                logToFile(format.format(date) + " - " + player.getName() + " has succesfully made an Ad." );
                 cooldown.add(player);
+                
+                if(this.getConfig().getString("debug").equalsIgnoreCase("true"))
+            	{
+               	logToFile(format.format(date) + "DEBUG: Economy part working");	
+            	}
+                
                 Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
                 	public void run() {
-                		cooldown.remove(bahoi);
+                		cooldown.remove(bahoi2);
                 	}
                 }, this.cdint);                
                                
@@ -403,169 +565,26 @@ public class Ad extends JavaPlugin
                 	player.sendMessage(ChatColor.translateAlternateColorCodes('&', this.prefix + this.failure2));
                 	econ.depositPlayer(sender.getName(), this.price); //Traiasca spookie
                 return false;
-                }
         
-        
-        }
-        
-	
-        return false;     
-	
-	}
-
-
-     public class Bungee implements CommandExecutor
-     {
-     		String you;
-     	    String afterYou;
-     		String msgColor;
-     		String newMsg;
-     		String beforeName;
-     		String nopermMsg;
-     		String prefix;
-     		String puncte;
-     		String usage;
-     		
-     		void Cacaness() {
-                  
-                // this.you = plugin.getConfig().getString("you");
-                // this.afterYou = plugin.getConfig().getString("afterYou");
-                // this.msgColor = plugin.getConfig().getString("msgColor");
-                // this.newMsg = plugin.getConfig().getString("customMessage");
-                 //this.beforeName = plugin.getConfig().getString("beforeName");
-                // this.nopermMsg = plugin.getConfig().getString("NoPermissionMessage");
-                 //this.prefix = plugin.getConfig().getString("prefix");
-
-         }
-     		   
-     	public void onPluginMessageReceived(String channel, Player player, byte[] message) {
-     	    if (!channel.equals("BungeeCord")) {
-     	      return;
-     	    }
-     	    ByteArrayDataInput in = ByteStreams.newDataInput(message);
-     	    String subchannel = in.readUTF();
-     	    if (subchannel.equals("SomeSubChannel")) {
-     	      
-     	    }
-     	String subChannel = in.readUTF();
-     	short len = in.readShort();
-     	byte[] msgbytes = new byte[len];
-     	in.readFully(msgbytes);
-     try {
-     	DataInputStream msgin = new DataInputStream(new ByteArrayInputStream(msgbytes));
-     	String somedata = msgin.readUTF(); 
-     	short somenumber = msgin.readShort();
-     } catch (IOException e) {
-
-     }
-     }
-
-     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
-     {
-     //pm <Player> <Message>
-     	 Player player = (Player) sender;
-     if (command.getName().equalsIgnoreCase("msg") && sender instanceof Player && plugin.getConfig().getString("bungeecordMsg").equalsIgnoreCase("true") && hasBungee(player))
-     {
-     	 
-     		
-     		 
-     		
-     	Player p = (Player) sender;
-     	if (args.length < 1)
-     	{		
-     	p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cUsage: &7/msg [Player] [Text]")); //this.usage
-     	return false;
-     			
-     	}
-     	
-     	String playerToSend = args[0];
-     	String msg = "";
-     	
-     	for (int i = 1; i < args.length; i++)
-     	    msg += args[i] + " ";
-
-     				
-     	ByteArrayOutputStream b = new ByteArrayOutputStream();
-     	DataOutputStream out = new DataOutputStream(b);
-     	
-     	try
-     	{
-     	
-     		
-     		//out.writeUTF("Forward");
-     		String prefixPEX = PermissionsEx.getUser(sender.getName()).getGroups()[0].getPrefix();              	
-            String message = plugin.getConfig().getString("beforeName");
-     		 message = message.replace("{prefix}", prefixPEX);
-     		
-     		//out.writeUTF("ALL");
-     		out.writeUTF("Message");
-     		out.writeUTF(playerToSend);
-     		//out.writeUTF(ChatColor.translateAlternateColorCodes('&', message + sender.getName() + this.afterYou + message + this.you + this.puncte + this.msgColor + msg));
-     		out.writeUTF(ChatColor.translateAlternateColorCodes('&', "&l&8» " + message + sender.getName() + " &l&8»  " + "&aYou&7: " + msg ));
-     		logToFile( format.format(date) + sender.getName() + " >> " + args[0] + msg);
-     		//p.sendMessage(ChatColor.translateAlternateColorCodes('&', this.you + this.afterYou + message + playerToSend + this.puncte + this.msgColor + msg));
-     		p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&l&8»  &aYou " + " &l&8»  " + message + args[0] + "&7: "+ msg));
-     		
-     		//if(plugin.getConfig().getString("enableCustomMsg").equalsIgnoreCase("true"))
-     		//{
-         		//sender.sendMessage(ChatColor.translateAlternateColorCodes('&', this.prefix + this.newMsg ));
-     		//	sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&l&8» &7Message sent" ));
-     		//}
-     	} catch (IOException e) {				
-     	}		
-
-     	p.sendPluginMessage(plugin, "BungeeCord", b.toByteArray());
-
-     } else {
-     	 sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "You don't have permission" )); //this.nopermMsg
-     }
-
-
-
-     if(command.getName().equalsIgnoreCase("mesaj") && sender instanceof Player && plugin.getConfig().getString("bungeecordMsg").equalsIgnoreCase("false") && hasBungee(player))
-     {
-     		Player p = (Player) sender;
-         	if (args.length < 1)
-         	{		
-         	p.sendMessage(ChatColor.translateAlternateColorCodes('&', this.usage));
-         	return false;
-         			
-         	}
-         	
-         	String msg = "";
-         	Player pl=Bukkit.getPlayer(args[0]);
-         	
-         	for (int i = 1; i < args.length; i++)
-         	    msg += args[i] + " ";
-         	String prefixPEX = PermissionsEx.getUser(sender.getName()).getGroups()[0].getPrefix();              	
-            String message = plugin.getConfig().getString("beforeName");
-     		 message = message.replace("{prefix}", prefixPEX);
-     		//pl.sendMessage(ChatColor.translateAlternateColorCodes('&', message + sender.getName() + this.afterYou + this.you + this.puncte + this.msgColor + msg));
-     		pl.sendMessage(ChatColor.translateAlternateColorCodes('&', "&l&8» " + message + sender.getName() + " &l&8»  " + "&aYou&7: " + msg ));
-     		//p.sendMessage(ChatColor.translateAlternateColorCodes('&', this.you + this.afterYou + message + args[0] + this.puncte + this.msgColor + msg));
-     		p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&l&8»  &aYou " + " &l&8»  " + message + ": " + args[0] + msg));
-     		logToFile( format.format(date) + sender.getName() + this.afterYou + args[0] + msg);
-     		//if(plugin.getConfig().getString("enableCustomMsg").equalsIgnoreCase("true"))
-     		//{
-         	//	sender.sendMessage(ChatColor.translateAlternateColorCodes('&', this.newMsg ));
-     		//}
-     	    
-     		
-     		
-     	
-     	 
-     } else {
-     	 sender.sendMessage(ChatColor.translateAlternateColorCodes('&', this.prefix + this.nopermMsg));
-     }
-
-
-
-     return false;
-  
-	}
-
-     }
+                }     
+        	
+      
+        	} else {
+        		
+        		player.sendMessage(ChatColor.translateAlternateColorCodes('&', this.noperm));
+        	
+        	}
+      
+      
+    	return true; 
+    	  
+	 }
 }
+        
+       
+
+ 
+
 
    
    
@@ -577,8 +596,4 @@ public class Ad extends JavaPlugin
 
 
 //Made by Moshu with help from MosLaDatorie.
-// (C): mc.b-zone.ro
-// B-Zone Community
-// All rights reserved. ( 2017 )
-// Any unauthorised copy or modification will be punished by laws in Romania.
-// Version 1.5
+//Version Beta 1.7 (Not working)
