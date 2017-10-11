@@ -1,15 +1,21 @@
 main: com.SimpleAd.MoshuAd.Ad
-version: 1.6
+version: 1.7
 name: SimpleAdvertising
 author: Moshu
+softdepend: [PlaceholderAPI, PlayerPoints, PermissionsEx]
+depend: [Vault, Essentials]
 
 commands:
   ad:
     description: Make an ad on the chat.
-  adreload:
-    description: Reloads the plugin
   date:
     description: Allows you to see the time
+  adb:
+    description: Send server broadcast
+  adt:
+    description: Send title to all players
+  adp:
+    description: Make ad using points
 permissions:
   simplead.*:
     default: op
@@ -18,6 +24,14 @@ permissions:
     default: op
   simplead.datecheck:
     default: op
+  simplead.adt:
+    default: op
+  simplead.bc:
+    default: op
+  simplead.ad:
+    default: op
+  simplead.help:
+    default: op
 
 #Made by Moshu with help from MosLaDatorie.
-# Version 1.6
+# Version 1.7
