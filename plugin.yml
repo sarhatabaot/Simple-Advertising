@@ -1,8 +1,8 @@
-main: com.SimpleAd.MoshuAd.Ad
-version: 1.7
-name: SimpleAdvertising
+main: com.Moshu.SimpleAdReloaded.Main
+version: 1.8
+name: SimpleAdvertising-Reloaded
 author: Moshu
-softdepend: [PlaceholderAPI, PlayerPoints, PermissionsEx]
+softdepend: [PlayerPoints, PermissionsEx]
 depend: [Vault, Essentials]
 
 commands:
@@ -12,10 +12,12 @@ commands:
     description: Allows you to see the time
   adb:
     description: Send server broadcast
-  adt:
-    description: Send title to all players
   adp:
     description: Make ad using points
+  news:
+    description: See the news on the server
+  msg:
+    description: Message to a player
 permissions:
   simplead.*:
     default: op
@@ -23,15 +25,17 @@ permissions:
   simplead.reload:
     default: op
   simplead.datecheck:
-    default: op
-  simplead.adt:
-    default: op
+    default: true
   simplead.bc:
     default: op
   simplead.ad:
-    default: op
+    default: true
   simplead.help:
-    default: op
+    default: true
+  simplead.msg:
+    default: true
+  simplead.news:
+    default: true
 
 #Made by Moshu with help from MosLaDatorie.
 # Version 1.7
