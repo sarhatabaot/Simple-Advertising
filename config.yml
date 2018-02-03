@@ -1,92 +1,169 @@
-prefix: "&7Ad &l&8» "
+#  Main Configuration for the /ad command >>>>
+
+
+prefix: "&7Ad &l&8Â» "
 #Sets the prefix before the ad
+
 price: 100
 #Sets the tax in money for when a player uses /ad
-succes: "&l&8» &aYour Ad was placed for "
+
+succes: "&l&8Â» &aYour Ad was placed for "
 #Sets the succes transaction message
-failure: "&l&8» &cYou don't have enough money."
+
+failure: "&l&8Â» &cYou don't have enough money."
 #Failure message because you don't have enough money
-nomessage: "&l&8» &cYou need to write something"
+
+nomessage: "&l&8Â» &cYou need to write something"
 #Failure message because you didn't write anything
+
 aftermessage: " &bContact: "
 #Displays string after the message  you input
+
 messagecolor: "&f"
 #The color the message is displayed in
+
 aftermoney: "$"
 #The symbol shown after the price you've paid
-reloadName: "SimpleAd"
-#The name that shows when reloaded
-reloadPhrase: "has Reloaded"
-#The phrase after author's name
-authorColor: "&a"
-#The color the author has
-noPermissionMessage: "&l&8» &cYou don't have permission!"
+
+noPermissionMessage: "&l&8Â» &cYou don't have permission!"
 #The message for when the player doesn't have permission
-cooldownMessage: "&l&8» &cYou need to wait &f30 &cseconds to use this again!"
+
+cooldownMessage: "&l&8Â» &cYou need to wait &f30 &cseconds to use this again!"
 #Error message for the cooldownMessage
+
 cooldown: 240
 #Time in ticks for the cooldown
+
 logging: false
 
-#------------------( Time Feature )--------------------#
+usageAd: "&cUsage: /ad (Advertisment)"
 
-TimeNoPermission: "&l&8» &cYou don't have permission to see the time"
+
+
+#  Configuration for the Time Feature >>>>
+
+TimeNoPermission: "&l&8Â» &cYou don't have permission to see the time"
 #The no permission message for the time feature
+enableDate: true
+#If you want to enable the /date command, leave this true.
 
-#-----------------------( Points )---------------------------#
 
-usePlayerPoints: true
-points: 100
-pointsName: "points"
-failurePoints: "&l&8» &cYou don't have enough money."
-succesPoints: "&l&8» &aYour Ad was placed for "
 
-#----------------------( Help Text )---------------------#
+#  Player Points Part >>>>
+
+#PlayerPoints is here just for teasing, but it will release soon
+
+#usePlayerPoints: true
+#points: 100
+#pointsName: "points"
+#failurePoints: "&l&8Â» &cYou don't have enough points."
+#succesPoints: "&l&8Â» &aYour Ad was placed for "
+
+
+
+#  The /ad help lang files >>>>
 
 helpHeader: "       &8&l---------- &f&l( &bSimpleAdvertising &f&l) &8&l----------"
 
 helpCommands: "&8&l- &bCommands:"
 
-helpCommand: "&l&8* &c/ad &l&8» &bMakes a public ad"
+helpCommand: "&l&8* &c/ad &l&8Â» &bMakes a public ad"
 
-helpCommand2: "&l&8* &c/ad reload &l&8» &bReloads the plugin"
+helpCommand2: "&l&8* &c/ad reload &l&8Â» &bReloads the plugin"
 
-helpCommand3: "&l&8* &c/ad help &l&8» &bShows this page"
+helpCommand3: "&l&8* &c/ad help &l&8Â» &bShows this page"
 
-helpCommand4: "&l&8* &c/adp &l&8» &bMake an ad with Points"
+helpCommand4: "&l&8* &c/adp &l&8Â» &bMake an ad with Points"
 
-helpCommand6: "&l&8* &c/adb &l&8» &bBroadcast using this plugin"
+helpCommand6: "&l&8* &c/adb &l&8Â» &bBroadcast using this plugin"
 
-helpCommand7: "&l&8* &c/adt &l&8» &bAnnounce with titles"
+helpCommand7: "&l&8* &c/adt &l&8Â» &bAnnounce with titles"
  
 helpSpigot: "&eFor further help check out this page: &6https://www.spigotmc.org/resources/simple-advertising.40414/"
 
-#----------------------( Broadcaster )---------------------#
+
+
+#  Broadcast usage message and prefix >>>>
 
 broadcastPrefix: "&fBroadcast &3>>&f "
 #The prefix for /adb
+broadcastUsage: "Usage: /bc"
+#Usage for broadcast
 
-#----------------------( Title Announcer )---------------------#
 
-titleSent: "&8&lTitle has been sent"
-#Confirm message for title
 
-#------------------------(Other)--------------------------#
+#  Join and Quit configuration >>>>
 
-enableDate: true
-#If you want to enable the /date command, leave this true.
+enable: true
 
-joinMessage: "Hello, %player_name%"
-#Can use placeholders from PlaceholderAPI
-#List of all placeholders are found here: https://www.spigotmc.org/wiki/placeholderapi-placeholders/
+joinMessage: "&a(&2Join&a) "
+#Message before the player name
+afterNameJoin: " "
+#Message after the player name
+quitMessage: "&c(&4Quit&c) "
+#Message before the player name
+afterNameQuit: " "
+#Message after the player name
 
-toEveryone: true
-#If you want the join message above to be broadcasted to all players
 
-debug: true
-#Enable debug mode to see what's wrong with the plugin
+#  Private Messaging >>>>
 
-#---------------(Author)------------------#
+messagePrefix: " "
+#The prefix before the message
 
-# Made by Moshu with help from MosLaDatorie.
-# Version 1.7
+noPerm: "You don't have permission"
+#No permission
+
+usageMsg: "Usage: /msg (Player) [Mesage]"
+#The usage for the command
+
+targetNotOn: "&cis not online"
+#Target is not online message
+
+messageSelf: "You cannot send yourself a message"
+#If he sends himself a message
+
+nameColorTargetNotOn: "&c"
+
+#Down below is the message format
+
+
+#Sender view
+
+beforeTarget: "&7"
+#Before the target name. With the defaults, it will look like: &cMoshu &8&l>> &6You: &fHello
+
+senderName: "  &6You &l&8Â» &c"
+
+targetPrefixName: "{prefixSENDER}"
+#Can be left blank
+
+afterTarget: ":&f "
+#You can put color code after : to color the message
+
+#Reciever view
+
+
+yourName: " &l&8Â» &6You"
+
+#senderPrefixName: "{prefixTARGET}"
+#Ignore this above option
+
+#  Other >>>>
+
+news: "Today's news:\n We've just got SimpleAdvertising and it's awesome :D"
+#To add more lines you just use \n and it will spell out just that.
+
+sounds: true
+#Sound notification for some commands.
+
+enableChat: true
+
+afterName: "&l&8Â» &f"
+#After your name in the chat functionality
+
+#  Don't mind me >>>>>
+#My Server: mc.b-zone.ro
+#Skype for info: edward.nanescu
+#Plugin version: 1.7
+#News: Join / Quit messages, Chat and /msg
