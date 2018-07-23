@@ -1,0 +1,228 @@
+package com.Moshu.SimpleAdvertising;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.Sound;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.RegisteredServiceProvider;
+
+import net.milkbowl.vault.economy.Economy;
+import net.milkbowl.vault.economy.EconomyResponse;
+
+public class Events implements Listener {
+
+	public static Main plugin;
+	
+	public Events(Main plugin)
+	{
+		this.plugin = plugin;
+	}
+	
+	Economy econ;
+	
+	String joinMessage;
+	String quitMessage;
+	String prefix;
+	String ad;
+	Date date = new Date();
+	SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy / HH:mm:ss");
+	ArrayList<String> in = new ArrayList<String>();
+	
+	
+	@EventHandler
+	public void onPlayerJoin(PlayerJoinEvent e)
+	{
+    	if(plugin.getConfig().getString("welcomers").equalsIgnoreCase("true"))
+    	{
+    	 joinMessage = plugin.getConfig().getString("join");
+    	 joinMessage = joinMessage.replace("{player}", e.getPlayer().getName());
+		 e.setJoinMessage(ChatColor.translateAlternateColorCodes('&', joinMessage));
+		 Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', joinMessage));
+    	} else
+    	{
+    		return;
+    	}
+		
+	}
+	
+	@EventHandler
+	 public void onPlayerQuit(PlayerQuitEvent e)
+	 {
+		if(plugin.getConfig().getString("enable").equalsIgnoreCase("true"))
+    	{
+			quitMessage = plugin.getConfig().getString("quit");
+	    	quitMessage = quitMessage.replace("{player}", e.getPlayer().getName());
+ 	 e.setQuitMessage(ChatColor.translateAlternateColorCodes('&', quitMessage));
+ 	 Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', quitMessage));
+    	} else
+    	{
+    		return;
+    	}
+	 
+	}
+	
+	@EventHandler(priority = EventPriority.HIGH)
+	public void onChat(AsyncPlayerChatEvent e)
+	{
+		Player p = e.getPlayer();
+		RegisteredServiceProvider rsp = Bukkit.getServer().getServicesManager().getRegistration(Economy.class);  	 
+	    econ = (Economy)rsp.getProvider();
+	    
+	    String tf = plugin.getConfig().getString("transaction-cancelled");
+	    int price = plugin.getConfig().getInt("price");
+	    String succes = plugin.getConfig().getString("succes");
+	    int cooldownTime = plugin.getConfig().getInt("cooldown");
+		
+		if(in.contains(p.getName()))
+		{
+			e.setCancelled(true);
+			
+			if(e.getMessage().equalsIgnoreCase("cancel"))
+			{
+				in.remove(p.getName());
+				p.sendMessage(ChatColor.translateAlternateColorCodes('&', prefix + tf));
+				Utils.sendSound(p);
+				return;
+			}
+			
+			if(plugin.getConfig().getString("economy").equalsIgnoreCase("money"))
+			{
+			
+			EconomyResponse r = econ.withdrawPlayer(p.getName(), price);		  
+            if (r.transactionSuccess()) 
+            {     
+			
+			String mesaj = e.getMessage();
+			String advertisingFormat = plugin.getConfig().getString("format");
+			
+			for(Player k : Bukkit.getOnlinePlayers())
+			{
+				advertisingFormat = advertisingFormat.replace("{message}", mesaj);
+				advertisingFormat = advertisingFormat.replace("{player}", p.getName());
+				advertisingFormat = advertisingFormat.replace("{prefix}", prefix);
+				k.sendMessage(ChatColor.translateAlternateColorCodes('&', advertisingFormat));
+			}
+			
+			String priceToString = Integer.toString(price);
+            succes = succes.replace("{price}", priceToString);
+            
+            p.sendMessage(ChatColor.translateAlternateColorCodes('&', succes));
+            
+            if(plugin.getConfig().getString("logging").equalsIgnoreCase("true"))
+            {
+            Utils.logToFile(format.format(date) + " (Advertising) " + mesaj + " . Made by: " + p.getName());
+            }
+            
+            Advertising.cooldown.add(p.getName());
+            in.remove(p.getName());
+ 
+              Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() 
+              {
+              	public void run() {
+              		Advertising.cooldown.remove(p.getName());		
+              	}
+              }, cooldownTime * 20);                  
+           
+              Utils.sendSound(p);
+        
+        } else 
+        {
+            
+        	p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cSomething went wrong.."));
+        	econ.depositPlayer(p.getName(), price); //Traiasca spookie
+            return;
+
+        }
+			
+            }
+			
+			}
+			else if(plugin.getConfig().getString("economy").equalsIgnoreCase("points"))
+			{
+				return;
+			}
+		}
+	
+	
+	@EventHandler
+	public void onClick(InventoryClickEvent e)
+	{
+        
+		RegisteredServiceProvider rsp = Bukkit.getServer().getServicesManager().getRegistration(Economy.class);  	 
+	    econ = (Economy)rsp.getProvider();
+		
+		String title = plugin.getConfig().getString("inventory-name");
+		String item = plugin.getConfig().getString("item");
+		String dialog = plugin.getConfig().getString("dialog");
+		int price = plugin.getConfig().getInt("price");
+		prefix = plugin.getConfig().getString("prefix");
+		String noMoney = plugin.getConfig().getString("failure");
+	    Player p = (Player) e.getWhoClicked();
+		
+		if(e.getInventory().getTitle().equals(title))
+		{
+			e.setCancelled(true);
+			
+			if((e.getCurrentItem() == null) || (e.getCurrentItem().getType().equals(Material.AIR)))
+			{
+		    return;
+			}
+			
+			if(e.getSlot() == 4)
+			{
+				Utils.sendSound(p);
+				if(Advertising.cooldown.contains(p.getName()))
+				{
+					String cooldownMessage = plugin.getConfig().getString("cooldown-message");
+					p.sendMessage(ChatColor.translateAlternateColorCodes('&', prefix + cooldownMessage));
+					return;
+				}
+				
+				 if(plugin.getConfig().getString("economy").equalsIgnoreCase("money"))
+			        {
+			        	
+			        if(Bukkit.getPluginManager().getPlugin("Vault") == null)
+			        {
+			        	Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&c&lError: &7&oYou don't own a required dependency: &fVault"));
+			        	return;
+			        }
+			        
+			        double b = (econ.getBalance(p.getName()));
+			      	
+			      	if(b < price)
+			      	{
+			            p.sendMessage(ChatColor.translateAlternateColorCodes('&', prefix + noMoney));
+			          	Utils.logToFile(format.format(date) + " - " + "Warn > " + p.getName() + " didn't have enough money.");
+			            return;
+			        } 
+	
+				in.add(p.getName());
+				p.sendMessage(ChatColor.translateAlternateColorCodes('&', prefix + dialog));
+				p.closeInventory();
+				return;
+			        }
+				 
+				 else if(plugin.getConfig().getString("economy").equalsIgnoreCase("points"))
+				 {
+					 return;
+				 }
+			}
+			 
+		}
+		return;
+	}
+	
+}
