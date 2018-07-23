@@ -1,41 +1,28 @@
-main: com.Moshu.SimpleAdReloaded.Main
-version: 1.8
-name: SimpleAdvertising-Reloaded
+main: com.Moshu.SimpleAdvertising.Main
+name: SimpleAdvertising
+version: 1.9.2
 author: Moshu
-softdepend: [PlayerPoints, PermissionsEx]
-depend: [Vault, Essentials]
+website: http://mc.b-zone.ro
+softdepend: [Essentials, Vault, PlaceholderAPI]
 
 commands:
   ad:
-    description: Make an ad on the chat.
-  date:
-    description: Allows you to see the time
-  adb:
-    description: Send server broadcast
-  adp:
-    description: Make ad using points
-  news:
-    description: See the news on the server
-  msg:
-    description: Message to a player
+    description: Display an announcement on the chat
+  broadcast:
+    description: Broadcast text in chat
 permissions:
-  simplead.*:
+  simplead.ad:
     default: op
-    description: Give players with op everything by default
+    description: Display an announcement
+  simplead.broadcast:
+    default: op
+    description: Title & chat broadcasting
   simplead.reload:
     default: op
-  simplead.datecheck:
-    default: true
-  simplead.bc:
-    default: op
-  simplead.ad:
-    default: true
+    description: Reload the plugin
   simplead.help:
     default: true
-  simplead.msg:
-    default: true
-  simplead.news:
-    default: true
-
-#Made by Moshu with help from MosLaDatorie.
-# Version 1.7
+    description: Allow players to see /help page
+  simplead.admin:
+    default: op
+    description: Admin
