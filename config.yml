@@ -1,169 +1,105 @@
-#  Main Configuration for the /ad command >>>>
+#SimpleAdvertising, Beta 1.9
 
+economy: "money"
+#There are 2 types of economy, money and points, but points isn't availible yet
+#in this beta version.
 
-prefix: "&7Ad &l&8Â» "
-#Sets the prefix before the ad
+prefix: "&f&l(&cAdvertising&f&l)&f "
+#Prefix for the majority of messages
 
-price: 100
-#Sets the tax in money for when a player uses /ad
+welcomers: true
+#Enable Join/Quit messages?
 
-succes: "&l&8Â» &aYour Ad was placed for "
-#Sets the succes transaction message
-
-failure: "&l&8Â» &cYou don't have enough money."
-#Failure message because you don't have enough money
-
-nomessage: "&l&8Â» &cYou need to write something"
-#Failure message because you didn't write anything
-
-aftermessage: " &bContact: "
-#Displays string after the message  you input
-
-messagecolor: "&f"
-#The color the message is displayed in
-
-aftermoney: "$"
-#The symbol shown after the price you've paid
-
-noPermissionMessage: "&l&8Â» &cYou don't have permission!"
-#The message for when the player doesn't have permission
-
-cooldownMessage: "&l&8Â» &cYou need to wait &f30 &cseconds to use this again!"
-#Error message for the cooldownMessage
-
-cooldown: 240
-#Time in ticks for the cooldown
-
-logging: false
-
-usageAd: "&cUsage: /ad (Advertisment)"
-
-
-
-#  Configuration for the Time Feature >>>>
-
-TimeNoPermission: "&l&8Â» &cYou don't have permission to see the time"
-#The no permission message for the time feature
-enableDate: true
-#If you want to enable the /date command, leave this true.
-
-
-
-#  Player Points Part >>>>
-
-#PlayerPoints is here just for teasing, but it will release soon
-
-#usePlayerPoints: true
-#points: 100
-#pointsName: "points"
-#failurePoints: "&l&8Â» &cYou don't have enough points."
-#succesPoints: "&l&8Â» &aYour Ad was placed for "
-
-
-
-#  The /ad help lang files >>>>
-
-helpHeader: "       &8&l---------- &f&l( &bSimpleAdvertising &f&l) &8&l----------"
-
-helpCommands: "&8&l- &bCommands:"
-
-helpCommand: "&l&8* &c/ad &l&8Â» &bMakes a public ad"
-
-helpCommand2: "&l&8* &c/ad reload &l&8Â» &bReloads the plugin"
-
-helpCommand3: "&l&8* &c/ad help &l&8Â» &bShows this page"
-
-helpCommand4: "&l&8* &c/adp &l&8Â» &bMake an ad with Points"
-
-helpCommand6: "&l&8* &c/adb &l&8Â» &bBroadcast using this plugin"
-
-helpCommand7: "&l&8* &c/adt &l&8Â» &bAnnounce with titles"
- 
-helpSpigot: "&eFor further help check out this page: &6https://www.spigotmc.org/resources/simple-advertising.40414/"
-
-
-
-#  Broadcast usage message and prefix >>>>
-
-broadcastPrefix: "&fBroadcast &3>>&f "
-#The prefix for /adb
-broadcastUsage: "Usage: /bc"
-#Usage for broadcast
-
-
-
-#  Join and Quit configuration >>>>
-
-enable: true
-
-joinMessage: "&a(&2Join&a) "
-#Message before the player name
-afterNameJoin: " "
-#Message after the player name
-quitMessage: "&c(&4Quit&c) "
-#Message before the player name
-afterNameQuit: " "
-#Message after the player name
-
-
-#  Private Messaging >>>>
-
-messagePrefix: " "
-#The prefix before the message
-
-noPerm: "You don't have permission"
-#No permission
-
-usageMsg: "Usage: /msg (Player) [Mesage]"
-#The usage for the command
-
-targetNotOn: "&cis not online"
-#Target is not online message
-
-messageSelf: "You cannot send yourself a message"
-#If he sends himself a message
-
-nameColorTargetNotOn: "&c"
-
-#Down below is the message format
-
-
-#Sender view
-
-beforeTarget: "&7"
-#Before the target name. With the defaults, it will look like: &cMoshu &8&l>> &6You: &fHello
-
-senderName: "  &6You &l&8Â» &c"
-
-targetPrefixName: "{prefixSENDER}"
-#Can be left blank
-
-afterTarget: ":&f "
-#You can put color code after : to color the message
-
-#Reciever view
-
-
-yourName: " &l&8Â» &6You"
-
-#senderPrefixName: "{prefixTARGET}"
-#Ignore this above option
-
-#  Other >>>>
-
-news: "Today's news:\n We've just got SimpleAdvertising and it's awesome :D"
-#To add more lines you just use \n and it will spell out just that.
+join: "&a(&2Join&a) {player}"
+quit: "&c(&4Quit&c) {player}"
+#Configure Join/Quit messages. Placeholders: {player}
 
 sounds: true
-#Sound notification for some commands.
+#Enable sounds when possible?
 
-enableChat: true
+sound: BLOCK_NOTE_PLING
+#What sound would you like to hear, full list of valid sounds here: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html
 
-afterName: "&l&8Â» &f"
-#After your name in the chat functionality
+logging: true
+#Enable logging? It will create a logs.txt file and log any activity in the plugin
 
-#  Don't mind me >>>>>
-#My Server: mc.b-zone.ro
-#Skype for info: edward.nanescu
-#Plugin version: 1.7
-#News: Join / Quit messages, Chat and /msg
+cooldown: 10
+#Cooldown time, in seconds
+
+price: 100
+#Price for advertising, in money or points it depends on what you've selected.
+
+format: "{prefix}&7{message}, made by &f{player}&7."
+#Advertising format. Availible placeholders: {prefix}, {message}, {player}
+
+succes: "&7Your ad was placed for &f{price}&a$"
+#Succes ad format. Placehodlers: {price}
+
+failure: "You don't have enough money"
+#No-Money format
+
+cooldown-message: "You have to wait before posting another advertisment"
+#Still in cooldown message
+
+inventory-name: "Advertising Menu"
+#GUI name, sadly without color codes because it's more reliable, maybe in the future i'll put support for them too.
+
+item: "PAPER"
+#Ad material, for a list of all valid materials look here: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html. 
+
+item-name: "&cAdvertise"
+#Item name
+
+item-lore:
+  - "&7&oSend a public ad"
+  - "&7&oFor everyone to see"
+  - "&7&oPrice: &a$&f{price}"
+#Advertising item's lore. Placeholders: {price}
+
+dialog: "&oType in chat your desired ad, or type &ccancel &f&oto cancel the transaction"
+#GUI dialog
+
+titles:
+  fade-in: 30
+  stay: 50
+  fade-out: 30
+#Options for the titles shown. Values are in ticks (20 ticks = 1 second)
+
+no-permission:
+  title: "&c&l✖"
+  subtitle: "&fNo permission"
+#No permission title.
+
+auto-advertiser:
+  chat: true
+  titles: true
+  minimum-players-online: 1
+  chat-interval: 60
+  titles-interval: 65
+  chat-messages:
+    - "{prefix} We've just got the best plugin in the world, SimpleAdvertising"
+    - "{prefix} For just {price}&a$&f, you can sell your items, house, or life in moments"
+    - "{prefix} You just have to love it"
+  title-messages:
+    - "{prefix}"
+    - "Everything"
+  subtitle-messages:
+    - "Woah! So cool"
+    - "&cIs way better now"
+#In the messages, you have full PlaceholderAPI support, yay :3
+#Chat - Do you want to advertise in chat?
+#Titles - Do you want to advertise with titles?
+#Minimum-players-online - The minimum players online to send the messages
+#Chat-interval - The interval between chat auto-ads.
+#Titles-interval - The interval between title auto-ads.
+#Chat-messages - List holding all the messages you want to send
+#Title-messages - The title you want to send
+#Subtitle-messageS: - The subtitle you want to send, be carefull
+#To set the same index for both.
+ 
+
+transaction-cancelled: "&oTransaction cancelled, thank you for your time"
+#Cancelled transaction message
+
+updater: true
+#Enable update-looking? (Console will still be notified, but players won't)
