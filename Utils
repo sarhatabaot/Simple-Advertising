@@ -55,14 +55,6 @@ public class Utils {
 		
 		meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', name));
 		
-		//ArrayList<String> lore = new ArrayList<String>();
-		
-		//lore.add(ChatColor.translateAlternateColorCodes('&', "&7&oSend a public ad"));
-		//lore.add(ChatColor.translateAlternateColorCodes('&', "&7&oFor everyone to see"));
-		//lore.add(ChatColor.translateAlternateColorCodes('&', "&7&oPrice: &a$&f" + price));
-		
-		//meta.setLore(lore);
-		
 		List<String> strings = new ArrayList<>();
 		
 		for (String string : plugin.getConfig().getStringList("item-lore")) 
@@ -91,12 +83,6 @@ public class Utils {
 			ItemMeta meta = itm.getItemMeta();
 			
 			meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', name));
-			
-			//ArrayList<String> lore = new ArrayList<String>();
-			
-			//lore.add(ChatColor.translateAlternateColorCodes('&', "&7&oSend a public ad"));
-			//lore.add(ChatColor.translateAlternateColorCodes('&', "&7&oFor everyone to see"));
-			//lore.add(ChatColor.translateAlternateColorCodes('&', "&7&oPrice: &a$&f" + price));
 			
 			List<String> strings = new ArrayList<>();
 			for (String string : plugin.getConfig().getStringList("item-lore")) 
