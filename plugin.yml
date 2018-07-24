@@ -1,0 +1,28 @@
+main: com.Moshu.SimpleAdvertising.Main
+name: SimpleAdvertising
+version: 1.9.2
+author: Moshu
+website: http://mc.b-zone.ro
+softdepend: [Essentials, Vault, PlaceholderAPI]
+
+commands:
+  ad:
+    description: Display an announcement on the chat
+  broadcast:
+    description: Broadcast text in chat
+permissions:
+  simplead.ad:
+    default: op
+    description: Display an announcement
+  simplead.broadcast:
+    default: op
+    description: Title & chat broadcasting
+  simplead.reload:
+    default: op
+    description: Reload the plugin
+  simplead.help:
+    default: true
+    description: Allow players to see /help page
+  simplead.admin:
+    default: op
+    description: Admin
