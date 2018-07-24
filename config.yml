@@ -1,74 +1,41 @@
-#SimpleAdvertising, Beta 1.9
+#  SimpleAdvertising, 1.9.3. Made by Moshu
+#  > Change-log:
+# - Re-made the config layout to be more professional
+# - Added "points" economy type, finally
+# - New "data" file will be now generated
+# - Code optimisations
+# Enjoy! :3
 
-economy: "money"
-#There are 2 types of economy, money and points, but points isn't availible yet
-#in this beta version.
+enable:
+  welcomers: true
+  logging: true
+  sounds: true
+  updater: true
 
-prefix: "&f&l(&cAdvertising&f&l)&f "
-#Prefix for the majority of messages
+advertising:
+  economy: "money"
+  cooldown: 10
+  price: 100
+  sound: BLOCK_NOTE_PLING
+#Vaild economy types: money, points.
 
-welcomers: true
-#Enable Join/Quit messages?
+points:
+  default-balance: 1
 
-join: "&a(&2Join&a) {player}"
-quit: "&c(&4Quit&c) {player}"
-#Configure Join/Quit messages. Placeholders: {player}
-
-sounds: true
-#Enable sounds when possible?
-
-sound: BLOCK_NOTE_PLING
-#What sound would you like to hear, full list of valid sounds here: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html
-
-logging: true
-#Enable logging? It will create a logs.txt file and log any activity in the plugin
-
-cooldown: 10
-#Cooldown time, in seconds
-
-price: 100
-#Price for advertising, in money or points it depends on what you've selected.
-
-format: "{prefix}&7{message}, made by &f{player}&7."
-#Advertising format. Availible placeholders: {prefix}, {message}, {player}
-
-succes: "&7Your ad was placed for &f{price}&a$"
-#Succes ad format. Placehodlers: {price}
-
-failure: "You don't have enough money"
-#No-Money format
-
-cooldown-message: "You have to wait before posting another advertisment"
-#Still in cooldown message
-
-inventory-name: "Advertising Menu"
-#GUI name, sadly without color codes because it's more reliable, maybe in the future i'll put support for them too.
-
-item: "PAPER"
-#Ad material, for a list of all valid materials look here: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html. 
-
-item-name: "&cAdvertise"
-#Item name
-
-item-lore:
-  - "&7&oSend a public ad"
-  - "&7&oFor everyone to see"
-  - "&7&oPrice: &a$&f{price}"
-#Advertising item's lore. Placeholders: {price}
-
-dialog: "&oType in chat your desired ad, or type &ccancel &f&oto cancel the transaction"
-#GUI dialog
+gui:
+  inventory-name: "Advertising Menu"
+  item: "PAPER"
+  item-name: "&cAdvertise"
+  item-lore:
+    - "&7&oSend a public ad"
+    - "&7&oFor everyone to see"
+    - "&7&oPrice: &a$&f{price}"
 
 titles:
   fade-in: 30
   stay: 50
   fade-out: 30
-#Options for the titles shown. Values are in ticks (20 ticks = 1 second)
-
-no-permission:
-  title: "&c&l✖"
-  subtitle: "&fNo permission"
-#No permission title.
+#20 ticks = 1 second
 
 auto-advertiser:
   chat: true
@@ -86,20 +53,30 @@ auto-advertiser:
   subtitle-messages:
     - "Woah! So cool"
     - "&cIs way better now"
-#In the messages, you have full PlaceholderAPI support, yay :3
-#Chat - Do you want to advertise in chat?
-#Titles - Do you want to advertise with titles?
-#Minimum-players-online - The minimum players online to send the messages
-#Chat-interval - The interval between chat auto-ads.
-#Titles-interval - The interval between title auto-ads.
-#Chat-messages - List holding all the messages you want to send
-#Title-messages - The title you want to send
-#Subtitle-messageS: - The subtitle you want to send, be carefull
-#To set the same index for both.
- 
 
-transaction-cancelled: "&oTransaction cancelled, thank you for your time"
-#Cancelled transaction message
+broadcast:
+  enable-titles: true
+  title: "&c&lBroadcast"
+  subtitle: "{message}"
+  chat:
+    - "&8&m---&l&f(&cBroadcast&f&l)&8&m---"
+    - ""
+    - "{message}"
+    - ""
 
-updater: true
-#Enable update-looking? (Console will still be notified, but players won't)
+messages:
+  prefix: "&f&l(&cAdvertising&f&l)&f "
+  format: "{prefix}&7{message}, made by &f{player}&7."
+  succes: "&7Your ad was placed for &f{price}&a$"
+  balance: "&oYou have &c{points} &f&opoints"
+  no-money: "You don't have enough money"
+  no-points: "You don't have enough points"
+  cooldown-message: "You have to wait before posting another advertisment"
+  transaction-cancelled: "&oTransaction cancelled, thank you for your time"
+  dialog: "&oType in chat your desired ad, or type &ccancel &f&oto cancel the transaction"
+  empty-message: "&fHey! You forgot the message"
+  join: "&a(&2Join&a) {player}"
+  quit: "&c(&4Quit&c) {player}"
+  no-permission:
+    title: "&c&l✖"
+    subtitle: "&fNo permission"

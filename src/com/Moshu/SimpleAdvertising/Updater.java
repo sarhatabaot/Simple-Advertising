@@ -17,12 +17,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.PluginDescriptionFile;
 
-
-/**
-Updater method by: @EncryptDev on Spigot
-Thank you very much.
-*/
-
 public class Updater implements Listener {
 
 	private static Main plugin;
@@ -48,23 +42,19 @@ public class Updater implements Listener {
     }
 
     @EventHandler
-    public void onJoin(PlayerJoinEvent event) 
-    {
-        if(event.getPlayer().hasPermission("simplead.admin") && plugin.getConfig().getString("updater").equalsIgnoreCase("true"))
+    public void onJoin(PlayerJoinEvent event) {
+        if(event.getPlayer().hasPermission("simplead.admin") && plugin.getConfig().getString("enable.updater").equalsIgnoreCase("true"))
             if(isAvailable)
         event.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', "&cUpdate: &fAn update is ready for you:"));
         event.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', "&chttps://www.spigotmc.org/resources/simple-advertising.40414/updates"));
         Utils.sendSound(event.getPlayer());
     }
 
-    public void check() 
-    {
+    public void check() {
         isAvailable = checkUpdate();
     }
 
-    private boolean checkUpdate() 
-    {
-    
+    private boolean checkUpdate() {
     	Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&cUpdate: &fChecking for updates.."));
     	
         try {
@@ -74,8 +64,7 @@ public class Updater implements Listener {
             String raw = new BufferedReader(new InputStreamReader(connection.getInputStream())).readLine();
 
             String remoteVersion;
-            if(raw.contains("-")) 
-            {
+            if(raw.contains("-")) {
                 remoteVersion = raw.split("-")[0].trim();
             } else {
                 remoteVersion = raw;

@@ -21,9 +21,9 @@ public class AutoMessage {
 	
 	public void start()
 	{
-	
-		int price = plugin.getConfig().getInt("price");
-		String prefix = plugin.getConfig().getString("prefix");
+		
+		int price = plugin.getConfig().getInt("advertising.price");
+		String prefix = plugin.getConfig().getString("messages.prefix");
 		int interval = plugin.getConfig().getInt("auto-advertiser.chat-interval");
 		int mpo = plugin.getConfig().getInt("auto-advertiser.minimum-players-online");
 		

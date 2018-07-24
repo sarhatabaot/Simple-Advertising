@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -32,10 +33,10 @@ public class Utils {
 	public static void createInv(Player p)
 	{
 	
-		String title = plugin.getConfig().getString("inventory-name");
-		String item = plugin.getConfig().getString("item");
-		String name = plugin.getConfig().getString("item-name");
-		int price = plugin.getConfig().getInt("price");
+		String title = plugin.getConfig().getString("gui.inventory-name");
+		String item = plugin.getConfig().getString("gui.item");
+		String name = plugin.getConfig().getString("gui.item-name");
+		int price = plugin.getConfig().getInt("advertising.price");
 		
 		if(Material.matchMaterial(item) == null)
 		{
@@ -57,7 +58,7 @@ public class Utils {
 		
 		List<String> strings = new ArrayList<>();
 		
-		for (String string : plugin.getConfig().getStringList("item-lore")) 
+		for (String string : plugin.getConfig().getStringList("gui.item-lore")) 
 				{
 			String pret = Integer.toString(price);
 			string = string.replace("{price}", pret);
@@ -83,9 +84,9 @@ public class Utils {
 			ItemMeta meta = itm.getItemMeta();
 			
 			meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', name));
-			
+
 			List<String> strings = new ArrayList<>();
-			for (String string : plugin.getConfig().getStringList("item-lore")) 
+			for (String string : plugin.getConfig().getStringList("gui.item-lore")) 
 					{
 				String pret = Integer.toString(price);
 				string = string.replace("{price}", pret);
@@ -105,14 +106,21 @@ public class Utils {
 		
 	}
 		
+	public static void addToData(UUID uuid, String ad)
+	{
+		int ads = plugin.getData().getInt(uuid + ".ads-created") + 1;
+		plugin.getData().set(uuid + ".lastest-ad", ad);
+		plugin.getData().set(uuid + ".ads-created", ads);
+	}
+	
 	public static void sendSound(Player p)
 	{
-		if(plugin.getConfig().getString("sounds").equalsIgnoreCase("true"))
+		if(plugin.getConfig().getString("enable.sounds").equalsIgnoreCase("true"))
         {
 			try {
 				
 			
-            p.playSound(p.getLocation(), Sound.valueOf(plugin.getConfig().getString("sound")), 1, 1F);
+            p.playSound(p.getLocation(), Sound.valueOf(plugin.getConfig().getString("advertising.sound")), 1, 1F);
         
 			}
 			catch(Exception e)
@@ -130,14 +138,19 @@ public class Utils {
         }
 	}
 	
+	public static String getIp(Player p) {
+        String ipAddr = p.getAddress().getHostName();
+        return ipAddr;
+    }
+	
 	public static void sendNoAccess(Player p)
 	{
 		int fadein = plugin.getConfig().getInt("titles.fade-in");
 		int stay = plugin.getConfig().getInt("titles.stay");
 		int fadeout = plugin.getConfig().getInt("titles.fade-out");
 		
-		String i = ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("no-permission.title"));
-		String m = ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("no-permission.subtitle"));
+		String i = ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("messages.no-permission.title"));
+		String m = ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("messages.no-permission.subtitle"));
 		p.playSound(p.getLocation(), Sound.BLOCK_NOTE_PLING, 1, 1F);
 		p.sendTitle(i, m, fadein, stay, fadeout);
 	}
@@ -177,7 +190,7 @@ public class Utils {
  public static void logToFile(String message)
     
     {
- if (plugin.getConfig().getString("logging").equalsIgnoreCase("true")) {
+ if (plugin.getConfig().getString("enable.logging").equalsIgnoreCase("true")) {
         try
         {
             File dataFolder = plugin.getDataFolder();

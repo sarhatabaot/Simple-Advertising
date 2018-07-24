@@ -26,3 +26,6 @@ permissions:
   simplead.admin:
     default: op
     description: Admin
+  simplead.points:
+    default: op
+    description: Sees his own points

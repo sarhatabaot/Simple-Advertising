@@ -21,8 +21,9 @@ public class AutoTitles {
 	
 	public void start()
 	{
-		int price = plugin.getConfig().getInt("price");
-		String prefix = plugin.getConfig().getString("prefix");
+		
+		int price = plugin.getConfig().getInt("advertising.price");
+		String prefix = plugin.getConfig().getString("messages.prefix");
 		int interval = plugin.getConfig().getInt("auto-advertiser.titles-interval");
 		
 		int fadein = plugin.getConfig().getInt("titles.fade-in");

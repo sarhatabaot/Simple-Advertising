@@ -1,7 +1,13 @@
 package com.Moshu.SimpleAdvertising;
 
+import java.io.File;
+import java.io.IOException;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -78,6 +84,8 @@ public class Main extends JavaPlugin {
 		
 	    
 	    up.check();
+	    
+	    createFiles();
 	   
 	    if(getConfig().getString("auto-advertiser.chat").equalsIgnoreCase("true"))
 	    {
@@ -125,6 +133,40 @@ public class Main extends JavaPlugin {
 	            return true;
 	        }
 	        return false;
-	 } 
+	 }
+	 
+	 public FileConfiguration getData() {
+	        return this.data;
+	    }
+	 
+	    private File dataf;
+		private FileConfiguration data;
+	 
+	 public void createFiles() {
+        
+	        dataf = new File(getDataFolder(), "data.yml");
+	        
+	        if (!dataf.exists()) {
+	            dataf.getParentFile().mkdirs();
+	            saveResource("data.yml", false);
+	            Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&6&l* &cData.yml &fnot found, creating."));
+	         }
+	        
+	        data = new YamlConfiguration();
+	        
+	        try {
+          
+	            try {
+					data.load(dataf);
+				} catch (InvalidConfigurationException e) {
+			
+					e.printStackTrace();
+				}
+
+	            
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        }
+	    }
 	
 }
