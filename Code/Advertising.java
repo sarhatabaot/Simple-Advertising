@@ -296,9 +296,10 @@ public class Advertising implements CommandExecutor {
         
         Utils.addToData(uuid, mesaj);
         
+            String succesPuncte = plugin.getConfig().getString("messages.succes-points");
             String priceToString = Integer.toString(price);
             succes = succes.replace("{price}", priceToString);
-            p.sendMessage(ChatColor.translateAlternateColorCodes('&', succes));
+            p.sendMessage(ChatColor.translateAlternateColorCodes('&', succesPuncte));
             if(plugin.getConfig().getString("enable.logging").equalsIgnoreCase("true"))
             {
             Utils.logToFile(format.format(date) + " (Advertising) " + mesaj + " . Made by: " + p.getName());

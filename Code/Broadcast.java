@@ -14,9 +14,7 @@ import org.bukkit.entity.Player;
 
 public class Broadcast implements CommandExecutor {
 	
-	String prefix = plugin.getConfig().getString("messages.prefix"); 
-	
-	public static Main plugin;
+	private static Main plugin;
 	
 	public Broadcast(Main plugin)
 	{
@@ -26,6 +24,9 @@ public class Broadcast implements CommandExecutor {
 
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
 	{
+		
+		String prefix = plugin.getConfig().getString("messages.prefix"); 
+		
 		String broadcastMsg = "";
 		for (String a : args){
 		     broadcastMsg += a+" ";

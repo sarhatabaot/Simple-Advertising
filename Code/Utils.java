@@ -118,8 +118,7 @@ public class Utils {
 		if(plugin.getConfig().getString("enable.sounds").equalsIgnoreCase("true"))
         {
 			try {
-				
-			
+						
             p.playSound(p.getLocation(), Sound.valueOf(plugin.getConfig().getString("advertising.sound")), 1, 1F);
         
 			}
@@ -128,14 +127,8 @@ public class Utils {
 				Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&cError: &fInvalid sound. Use one from here: &chttps://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html"));
 				p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&c&lOops! &7The sound in your config is invalid, check again."));	
 			}
-        return;
-        } else
-      	  
-        {
-      	  
-        return;
-        
         }
+      
 	}
 	
 	public static String getIp(Player p) {
@@ -151,7 +144,7 @@ public class Utils {
 		
 		String i = ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("messages.no-permission.title"));
 		String m = ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("messages.no-permission.subtitle"));
-		p.playSound(p.getLocation(), Sound.BLOCK_NOTE_PLING, 1, 1F);
+		sendSound(p);
 		p.sendTitle(i, m, fadein, stay, fadeout);
 	}
 	
@@ -162,10 +155,17 @@ public class Utils {
 	
 	public static void sendTargetNull(Player p)
 	{
-		String i = ChatColor.translateAlternateColorCodes('&', "&c&l✖");
-		String m = ChatColor.translateAlternateColorCodes('&', "&fPlayer doesn't exist");
-		p.playSound(p.getLocation(), Sound.BLOCK_NOTE_PLING, 1, 1F);
-		p.sendTitle(i, m, 30, 50, 30);
+		String k = plugin.getConfig().getString("messages.target-null.title");
+		String c = plugin.getConfig().getString("messages.target-null.subtitle");
+		
+		int fadein = plugin.getConfig().getInt("titles.fade-in");
+		int stay = plugin.getConfig().getInt("titles.stay");
+		int fadeout = plugin.getConfig().getInt("titles.fade-out");
+		
+		String i = ChatColor.translateAlternateColorCodes('&', k);
+		String m = ChatColor.translateAlternateColorCodes('&', c);
+		sendSound(p);
+		p.sendTitle(i, m, fadein, stay, fadeout);
 	}
 	
 	public void createConfig() { 

@@ -3,7 +3,7 @@
 # - Re-made the config layout to be more professional
 # - Added "points" economy type, finally
 # - New "data" file will be now generated
-# - Code optimisations.
+# - Code optimisations
 # Enjoy! :3
 
 enable:
@@ -21,6 +21,23 @@ advertising:
 
 points:
   default-balance: 1
+  messages:
+    usage-give: "&fUsage: /points give (Player) (Points)"
+    usage-take: "&fUsage: /points take (Player) (Points)"
+    usage-set: "&fUsage: /points set (Player) (Points)"
+    negative-int: "&fYou cannot use negative numbers or 0"
+    set-points:
+      title: "{prefix}"
+      subtitle: "You've set &c{player}&f's points to &c{points}"
+    give-points:
+      title: "{prefix}"
+      subtitle: "You gave &c{points} &fpoints to &c{player}"
+    give-everyone-points:
+      title: "{prefix}"
+      subtitle: "You've given everyone &c{points} &fpoints"
+    take-points:
+      title: "{prefix}"
+      subtitle: "You took &c{points} &fpoints from &c{player}"
 
 gui:
   inventory-name: "Advertising Menu"
@@ -68,6 +85,7 @@ messages:
   prefix: "&f&l(&cAdvertising&f&l)&f "
   format: "{prefix}&7{message}, made by &f{player}&7."
   succes: "&7Your ad was placed for &f{price}&a$"
+  succes-points: "&7Your ad was placed for &f{price} points"
   balance: "&oYou have &c{points} &f&opoints"
   no-money: "You don't have enough money"
   no-points: "You don't have enough points"
@@ -80,3 +98,6 @@ messages:
   no-permission:
     title: "&c&l✖"
     subtitle: "&fNo permission"
+  target-null:
+    title: "&c&l✖"
+    subtitle: "&fTarget is not online"

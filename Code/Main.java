@@ -67,6 +67,13 @@ public class Main extends JavaPlugin {
 		return at;
 	}
 	
+	Points pts = new Points(this);
+	
+	public Points getPointsClass()
+	{
+		return pts;
+	}
+	
 	public void onEnable()
 	{
 		
@@ -102,6 +109,7 @@ public class Main extends JavaPlugin {
 	    
 	    getCommand("ad").setExecutor(ad);
 	    getCommand("broadcast").setExecutor(bc);
+	    getCommand("points").setExecutor(pts);
 	    
 	    Bukkit.getServer().getPluginManager().registerEvents(evn, this);
 	    Bukkit.getServer().getPluginManager().registerEvents(up, this);
