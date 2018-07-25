@@ -1,0 +1,103 @@
+#  SimpleAdvertising, 1.9.3. Made by Moshu
+#  > Change-log:
+# - Re-made the config layout to be more professional
+# - Added "points" economy type, finally
+# - New "data" file will be now generated
+# - Code optimisations
+# Enjoy! :3
+
+enable:
+  welcomers: true
+  logging: true
+  sounds: true
+  updater: true
+
+advertising:
+  economy: "money"
+  cooldown: 10
+  price: 100
+  sound: BLOCK_NOTE_PLING
+#Vaild economy types: money, points.
+
+points:
+  default-balance: 1
+  messages:
+    usage-give: "&fUsage: /points give (Player) (Points)"
+    usage-take: "&fUsage: /points take (Player) (Points)"
+    usage-set: "&fUsage: /points set (Player) (Points)"
+    negative-int: "&fYou cannot use negative numbers or 0"
+    set-points:
+      title: "{prefix}"
+      subtitle: "You've set &c{player}&f's points to &c{points}"
+    give-points:
+      title: "{prefix}"
+      subtitle: "You gave &c{points} &fpoints to &c{player}"
+    give-everyone-points:
+      title: "{prefix}"
+      subtitle: "You've given everyone &c{points} &fpoints"
+    take-points:
+      title: "{prefix}"
+      subtitle: "You took &c{points} &fpoints from &c{player}"
+
+gui:
+  inventory-name: "Advertising Menu"
+  item: "PAPER"
+  item-name: "&cAdvertise"
+  item-lore:
+    - "&7&oSend a public ad"
+    - "&7&oFor everyone to see"
+    - "&7&oPrice: &a$&f{price}"
+
+titles:
+  fade-in: 30
+  stay: 50
+  fade-out: 30
+#20 ticks = 1 second
+
+auto-advertiser:
+  chat: true
+  titles: true
+  minimum-players-online: 1
+  chat-interval: 60
+  titles-interval: 65
+  chat-messages:
+    - "{prefix} We've just got the best plugin in the world, SimpleAdvertising"
+    - "{prefix} For just {price}&a$&f, you can sell your items, house, or life in moments"
+    - "{prefix} You just have to love it"
+  title-messages:
+    - "{prefix}"
+    - "Everything"
+  subtitle-messages:
+    - "Woah! So cool"
+    - "&cIs way better now"
+
+broadcast:
+  enable-titles: true
+  title: "&c&lBroadcast"
+  subtitle: "{message}"
+  chat:
+    - "&8&m---&l&f(&cBroadcast&f&l)&8&m---"
+    - ""
+    - "{message}"
+    - ""
+
+messages:
+  prefix: "&f&l(&cAdvertising&f&l)&f "
+  format: "{prefix}&7{message}, made by &f{player}&7."
+  succes: "&7Your ad was placed for &f{price}&a$"
+  succes-points: "&7Your ad was placed for &f{price} points"
+  balance: "&oYou have &c{points} &f&opoints"
+  no-money: "You don't have enough money"
+  no-points: "You don't have enough points"
+  cooldown-message: "You have to wait before posting another advertisment"
+  transaction-cancelled: "&oTransaction cancelled, thank you for your time"
+  dialog: "&oType in chat your desired ad, or type &ccancel &f&oto cancel the transaction"
+  empty-message: "&fHey! You forgot the message"
+  join: "&a(&2Join&a) {player}"
+  quit: "&c(&4Quit&c) {player}"
+  no-permission:
+    title: "&c&l✖"
+    subtitle: "&fNo permission"
+  target-null:
+    title: "&c&l✖"
+    subtitle: "&fTarget is not online"
