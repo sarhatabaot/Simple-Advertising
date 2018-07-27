@@ -1,4 +1,4 @@
-This is a kind of an info file, so read carefully!
+#This is a kind of an info file, so read carefully!
 
 The dev builds are not tested, don't have customisable messages and aren't stable. They are made to make you comfortable with the new changes
 or just to see that I'm working on something. It isn't recommended to use these versions on your main server, because it may destroy your config,
