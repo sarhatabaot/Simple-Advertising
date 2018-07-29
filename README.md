@@ -1,6 +1,2 @@
 # Simple-Advertising
-This plugin is for the server owners that want their players to have a personalized Trade chat.
-I've added some date functionalities, and now I'm working on an upcoming plugin, and I have some work to do on my server.
-I try to make everything as configurable as possible but, it takes more time.
-
-If you want to have a feature in the plugin, just contact me
+A plugin made for Survival or RPG servers, but surely compatible for all multiplayer gametypes like SkyBlock, Hardcore Survival, or any other genre that has a strong point in item, skill, xp or land trading. Any player can make it's own advertisment on the public chat, in a friendly and easy way. You can put prices in money or points, set cooldowns so the chat isn't constantly spammed, broadcast messages to your players, we recently added a auto-advertising feature, and more to come. 1.13 ready, it is very configurable, and you can really use it in ingenious ways that I'd like to see. Scroll down for more info.
