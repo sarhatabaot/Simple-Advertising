@@ -67,9 +67,9 @@ public class Main extends JavaPlugin {
 		return at;
 	}
 	
-	Points pts = new Points(this);
+	AdvertisingPoints pts = new AdvertisingPoints(this);
 	
-	public Points getPointsClass()
+	public AdvertisingPoints getPointsClass()
 	{
 		return pts;
 	}

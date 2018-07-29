@@ -181,7 +181,7 @@ public class Events implements Listener {
 			{
 				UUID uuid = p.getUniqueId();
 	        	
-	        	Points.takePoints(p, price);
+	        	AdvertisingPoints.takePoints(p, price);
 	        	
 	        	String advertisingFormat = plugin.getConfig().getString("messages.format");
 	        	String mesaj = e.getMessage();
@@ -287,7 +287,7 @@ public class Events implements Listener {
 					 
 				 {
 					 
-					 if(Points.lookPoints(p) < price)
+					 if(AdvertisingPoints.lookPoints(p) < price)
 					 {
 						 p.sendMessage(ChatColor.translateAlternateColorCodes('&', prefix + noPoints));
 						 Utils.logToFile(format.format(date) + " - " + "Warn > " + p.getName() + " didn't have enough points.");

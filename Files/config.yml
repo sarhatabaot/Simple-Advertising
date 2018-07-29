@@ -26,18 +26,32 @@ points:
     usage-take: "&fUsage: /points take (Player) (Points)"
     usage-set: "&fUsage: /points set (Player) (Points)"
     negative-int: "&fYou cannot use negative numbers or 0"
+    insufficient-points: "This player doesn't have that much money"
     set-points:
       title: "{prefix}"
       subtitle: "You've set &c{player}&f's points to &c{points}"
     give-points:
       title: "{prefix}"
       subtitle: "You gave &c{points} &fpoints to &c{player}"
+    receive-points:
+      title: "{prefix}"
+      subtitle: "You received &c{points} &fpoints from &c{player}"
     give-everyone-points:
       title: "{prefix}"
       subtitle: "You've given everyone &c{points} &fpoints"
     take-points:
       title: "{prefix}"
       subtitle: "You took &c{points} &fpoints from &c{player}"
+    look-points:
+      title: "{prefix}"
+      subtitle: "You have &c{points} points&f."
+    give-all-points:
+      sent:
+        title: "{prefix}"
+        subtitle: "You sent &ceveryone {points} &fpoints"
+      received:
+        title: "{prefix}"
+        subtitle: "&cEveryone &frecieved &c{points} points&f."
 
 gui:
   inventory-name: "Advertising Menu"

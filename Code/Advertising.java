@@ -16,6 +16,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
+import com.Moshu.Essentials.Points;
 import com.earth2me.essentials.Essentials;
 
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -39,7 +40,6 @@ public class Advertising implements CommandExecutor {
 	String prefix; 
 	public static ArrayList<String> cooldown = new ArrayList<String>();
 	Economy econ;
-	
 	int cooldownTime;
 	int price;
 	String noMoney;
@@ -52,7 +52,7 @@ public class Advertising implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
 	{
 		
-		RegisteredServiceProvider rsp = Bukkit.getServer().getServicesManager().getRegistration(Economy.class);  	 
+		RegisteredServiceProvider rsp = Bukkit.getServer().getServicesManager().getRegistration(Economy.class);  
 	    econ = (Economy)rsp.getProvider();
 		prefix = plugin.getConfig().getString("messages.prefix");
 	    
@@ -136,7 +136,7 @@ public class Advertising implements CommandExecutor {
             }
             
             String str = plugin.getConfig().getString("messages.balance");
-            int bl = Points.lookPoints(p);
+            int bl = AdvertisingPoints.lookPoints(p);
             String s = Integer.toString(bl);
             str = str.replace("{points}", s);
             p.sendMessage(ChatColor.translateAlternateColorCodes('&', prefix + str));
@@ -272,7 +272,7 @@ public class Advertising implements CommandExecutor {
         		return true;
         	}
         	
-        	Points.takePoints(p, price);
+        	AdvertisingPoints.takePoints(p, price);
         	
         	String mesaj;
       	     mesaj = "";
