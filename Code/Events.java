@@ -199,14 +199,16 @@ public class Events implements Listener {
 	        
 	        Utils.addToData(uuid, mesaj);
 	        
-	            String priceToString = Integer.toString(price);
-	            succes = succes.replace("{price}", priceToString);
-	            p.sendMessage(ChatColor.translateAlternateColorCodes('&', succes));
+	        String succesPuncte = plugin.getConfig().getString("messages.succes-points");
+            String priceToString = Integer.toString(price);
+            succesPuncte = succesPuncte.replace("{price}", priceToString);
+	            p.sendMessage(ChatColor.translateAlternateColorCodes('&', succesPuncte));
 	            if(plugin.getConfig().getString("enable.logging").equalsIgnoreCase("true"))
 	            {
 	            Utils.logToFile(format.format(date) + " (Advertising) " + mesaj + " . Made by: " + p.getName());
 	            }
 	            Advertising.cooldown.add(p.getName());
+	            in.remove(p.getName());
 	 
 	              Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() 
 	              {

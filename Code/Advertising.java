@@ -298,7 +298,7 @@ public class Advertising implements CommandExecutor {
         
             String succesPuncte = plugin.getConfig().getString("messages.succes-points");
             String priceToString = Integer.toString(price);
-            succes = succes.replace("{price}", priceToString);
+            succesPuncte = succesPuncte.replace("{price}", priceToString);
             p.sendMessage(ChatColor.translateAlternateColorCodes('&', succesPuncte));
             if(plugin.getConfig().getString("enable.logging").equalsIgnoreCase("true"))
             {
