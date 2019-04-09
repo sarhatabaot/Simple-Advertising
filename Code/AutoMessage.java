@@ -43,6 +43,15 @@ public class AutoMessage {
      	
 		 public void run() {
  
+			 
+			 if(plugin.getConfig().getBoolean("auto-advertiser.chat") == false)
+			    {
+			    
+				 return;
+				 
+			    }
+
+			 
 			 if(Bukkit.getOnlinePlayers().size() >= mpo)
 			 {
 			 

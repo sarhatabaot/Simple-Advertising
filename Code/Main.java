@@ -8,6 +8,10 @@ import org.bukkit.ChatColor;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.server.PluginEnableEvent;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -74,6 +78,76 @@ public class Main extends JavaPlugin {
 		return pts;
 	}
 	
+	Debug dbg = new Debug(this);
+	
+	public Debug getDebugClass()
+	{
+		return dbg;
+	}
+	
+	
+	public boolean hasDependencies()
+    {
+
+         
+         if(Bukkit.getPluginManager().getPlugin("Vault") == null)
+        {
+            return false;
+        }
+         
+         else if(Bukkit.getPluginManager().getPlugin("EssentialsX") == null && Bukkit.getPluginManager().getPlugin("Essentials") == null)
+         {
+        	 return false;
+         }
+
+        else if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") == null)
+        {
+            return false;
+        }
+
+        return true;
+    }
+	
+	
+	public static void consoleMessage(String s)
+    {
+        Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', s));
+    }
+	
+	@EventHandler(priority = EventPriority.HIGHEST)
+    public void enableCheck(PluginEnableEvent e)
+    {
+        if(e.getPlugin().getName().equals("EssentialsLite"))
+        {
+
+            if(!hasDependencies())
+            {
+
+                if(Bukkit.getPluginManager().getPlugin("Vault") == null)
+                {
+                    consoleMessage("&c&lError: &fYou don't have Vault installed, plugin is shutting down");
+                }
+
+                else if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") == null)
+                {
+                    consoleMessage("&6&lWarning: &fYou don't have PAPI installed, placeholders disabled");
+                    return;
+                }
+                
+                else if(Bukkit.getPluginManager().getPlugin("EssentialsX") == null)
+                {
+                	consoleMessage("&6&lWarning: &FYou don't have Essentials installed, you may not have Economy Support.");
+                	return;
+                }
+
+                Bukkit.getPluginManager().disablePlugin(this);
+
+            }
+
+        }
+    }
+	
+	
 	public void onEnable()
 	{
 		
@@ -94,12 +168,12 @@ public class Main extends JavaPlugin {
 	    
 	    createFiles();
 	   
-	    if(getConfig().getString("auto-advertiser.chat").equalsIgnoreCase("true"))
+	    if(getConfig().getBoolean("auto-advertiser.chat") == true)
 	    {
 	    am.start();
 	    }
 	    
-	    if(getConfig().getString("auto-advertiser.titles").equalsIgnoreCase("true"))
+	    if(getConfig().getBoolean("auto-advertiser.titles") == true)
 	    {
 	    at.start();
 	    }
@@ -172,9 +246,34 @@ public class Main extends JavaPlugin {
 				}
 
 	            
-	        } catch (IOException e) {
+	        } catch (IOException e) 
+	        {
 	            e.printStackTrace();
 	        }
 	    }
+	 
+	 public static void reloadFiles()
+		{
+		 Plugin pl = Bukkit.getPluginManager().getPlugin("SimpleAdvertising");
+		 
+		 File configf = new File(pl.getDataFolder(), "config.yml");
+		 
+		 YamlConfiguration config = YamlConfiguration.loadConfiguration(configf);
+		 
+		 try {
+			 
+			config.save(configf);
+			
+		} 
+		 catch (IOException e) 
+		{
+			e.printStackTrace();
+		}
+		 
+		 config = YamlConfiguration.loadConfiguration(configf);
+		 
+		 
+		 
+		}
 	
 }

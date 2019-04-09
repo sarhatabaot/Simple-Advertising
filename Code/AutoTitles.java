@@ -43,6 +43,7 @@ public class AutoTitles {
 		}
 		
 		List<String> strings2 = new ArrayList<>();
+		
 		for (String string : plugin.getConfig().getStringList("auto-advertiser.subtitle-messages")) 
 				{
 			
@@ -55,6 +56,11 @@ public class AutoTitles {
 	Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
      	
 		 public void run() {
+			 
+			    if(plugin.getConfig().getBoolean("auto-advertiser.titles") == false)
+			    {
+			    return;
+			    }
 			 
 			 if(Bukkit.getOnlinePlayers().size() >= mpo)
 			 {

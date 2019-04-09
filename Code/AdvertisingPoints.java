@@ -105,7 +105,7 @@ public class AdvertisingPoints implements CommandExecutor {
 	{
 		if(!(sender instanceof Player))
 		{
-			Utils.sendNotPlayer(sender);
+			Utils.sendNotPlayer();
 			return true;
 		}
 		

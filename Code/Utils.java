@@ -4,9 +4,15 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import javax.management.Attribute;
+import javax.management.AttributeList;
+import javax.management.MBeanServer;
+import javax.management.ObjectName;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -29,6 +35,55 @@ public class Utils {
 	{
 		this.plugin = plugin;
 	}
+	
+	
+	public static double getUsedCPU()
+    {
+        try
+        {
+            MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
+            ObjectName name = ObjectName.getInstance("java.lang:type=OperatingSystem");
+            AttributeList list = mbs.getAttributes(name, new String[] { "ProcessCpuLoad" });
+            Attribute att = (Attribute)list.get(0);
+            Double value = (Double)att.getValue();
+
+            return (int)(value.doubleValue() * 1000.0D) / 10.0D;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return 0.0D;
+    }
+	
+	public static long getMaxMemory()
+    {
+        try
+        {
+            Runtime r = Runtime.getRuntime();
+            return r.maxMemory() / 1048576L;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return 0L;
+    }
+
+    public static long getMemoryUsed()
+    {
+        try
+        {
+            Runtime r = Runtime.getRuntime();
+            return (r.totalMemory() - r.freeMemory()) / 1048576L;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return 0L;
+    }
+	
 	
 	public static void createInv(Player p)
 	{

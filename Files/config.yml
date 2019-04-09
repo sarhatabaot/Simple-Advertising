@@ -1,10 +1,24 @@
-#  SimpleAdvertising, 1.9.3. Made by Moshu
-#  > Change-log:
-# - Re-made the config layout to be more professional
-# - Added "points" economy type, finally
-# - New "data" file will be now generated
-# - Code optimisations
-# Enjoy! :3
+
+###############################################################################################
+##
+##  SimpleAdvertising, 1.9.4. Made by Moshu
+##  > Change-log:
+## - Fixed bug with /ad reload
+## - Added /ad debug - Sends you debug info
+## - Plugin now checks for dependencies and shuts down if it doesn't find them
+## - Code optimisations
+## Enjoy! :3
+##
+##
+## USEFUL LINKS:
+## MATERIAL NAMES: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html
+## SOUND NAMES: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html
+## YML VALIDATOR: http://www.yamllint.com/
+## DISCORD SERVER FOR HELP: discord.gg/rADmNx9
+## WIKI: https://github.com/Moshulika/Simple-Advertising/wiki 
+##
+###############################################################################################
+
 
 enable:
   welcomers: true

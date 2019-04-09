@@ -241,7 +241,12 @@ public class Events implements Listener {
 		String noPoints = plugin.getConfig().getString("messages.no-points");
 	    Player p = (Player) e.getWhoClicked();
 		
-		if(e.getInventory().getTitle().equals(title))
+	    if(e.getClickedInventory() == null)
+	    {
+	    	return;
+	    }
+	    
+		if(e.getClickedInventory().getTitle().equals(title))
 		{
 			e.setCancelled(true);
 			

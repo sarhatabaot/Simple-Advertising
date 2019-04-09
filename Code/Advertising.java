@@ -48,7 +48,6 @@ public class Advertising implements CommandExecutor {
 	String advertisingFormat;
 	String noPoints;
 	
-	
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
 	{
 		
@@ -114,11 +113,26 @@ public class Advertising implements CommandExecutor {
        		  sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&l&8* &c/ad (Message) &l&8» &bMakes a public ad"));
        		  sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&l&8* &c/ad reload &l&8» &bReloads the plugin"));
        		  sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&l&8* &c/ad help &l&8» &bShows this page"));
+       		  sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&l&8* &c/ad debug &l&8» &bShows debug info"));
        		  sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&l&8* &c/broadcast &l&8» &bBroadcast using this plugin"));
        		  sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&eFor further help check out this page: &6https://www.spigotmc.org/resources/simple-advertising.40414/"));
        		  Utils.sendSound(p);
        		  return true;
        	  }
+			
+			else if(args[0].equalsIgnoreCase("debug"))
+			{
+				
+				if(!p.hasPermission("simplead.debug"))
+				{
+					Utils.sendNoAccess(p);
+					Utils.sendSound(p);
+					return true;
+				}
+				
+				Debug.sendServerInfo(p);
+				
+			}
   
 		
 		else if(args[0].equalsIgnoreCase("bal") || args[0].equalsIgnoreCase("balance") || args[0].equalsIgnoreCase("points"))
@@ -159,12 +173,18 @@ public class Advertising implements CommandExecutor {
                  	return true;
                  }
                  
-                plugin.getPluginLoader().disablePlugin(plugin); 
-                plugin.getPluginLoader().enablePlugin(plugin);
-                plugin.saveDefaultConfig();
-                plugin.reloadConfig();
+                 plugin.getPluginLoader().disablePlugin(plugin); 
+                 plugin.getPluginLoader().enablePlugin(plugin);
+                 plugin.saveDefaultConfig();
+                 plugin.reloadConfig();
+               
+                 
+                Main.reloadFiles();
               
+                plugin.saveConfig();  
+                
                 p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&f&l(&cAdvertising&f&l) &fSuccesfully reloaded."));
+                
                 Utils.logToFile(format.format(date) + " - " + "Reload > " +  sender.getName() + " has reloaded the plugin.");
                 Utils.sendSound(p);
                 

@@ -1,6 +1,6 @@
 main: com.Moshu.SimpleAdvertising.Main
 name: SimpleAdvertising
-version: 2.0
+version: 1.9.4
 author: Moshu
 website: http://mc.b-zone.ro
 softdepend: [Essentials, Vault, PlaceholderAPI]
@@ -31,3 +31,6 @@ permissions:
   simplead.points:
     default: op
     description: Sees his own points
+  simplead.debug:
+    default: op
+    description: Use debug command
