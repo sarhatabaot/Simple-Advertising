@@ -203,11 +203,6 @@ public class Utils {
 		p.sendTitle(i, m, fadein, stay, fadeout);
 	}
 	
-	public static void sendNotPlayer(CommandSender sender)
-	{
-		Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&c&l* &fYou need to be a player to acces this command"));
-	}
-	
 	public static void sendTargetNull(Player p)
 	{
 		String k = plugin.getConfig().getString("messages.target-null.title");
@@ -222,6 +217,22 @@ public class Utils {
 		sendSound(p);
 		p.sendTitle(i, m, fadein, stay, fadeout);
 	}
+	
+	public static boolean isInt(String str)
+    {
+        try
+        {
+            Integer.parseInt(str);
+            return true;
+        }
+        catch (NumberFormatException e) {}
+        return false;
+    }
+	
+	public static void sendNotPlayer()
+    {
+        Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&c&l* &fTrebuie sa fii jucator pentru a accesa aceasta comanda."));
+    }
 	
 	public void createConfig() { 
 	    try {

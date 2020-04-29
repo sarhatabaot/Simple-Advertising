@@ -28,7 +28,7 @@ public class Debug {
                 p.sendMessage("");
                 p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&8&l&m-----------------------------"));
 
-                p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&aServer name: &7" + Bukkit.getServerName()));
+                p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&aServer name: &7" + Bukkit.getServer().getName()));
                 p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&aGamemode: &7" + Bukkit.getDefaultGameMode().toString()));
                 p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&aVersion: &7" + Bukkit.getVersion().replace("-SNAPSHOT", "")));
                 p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&aPlayers: &7" + Bukkit.getOnlinePlayers().size() + "/" + Bukkit.getMaxPlayers()));

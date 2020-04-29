@@ -43,11 +43,15 @@ public class Updater implements Listener {
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
-        if(event.getPlayer().hasPermission("simplead.admin") && plugin.getConfig().getString("enable.updater").equalsIgnoreCase("true"))
+        if(event.getPlayer().hasPermission("simplead.admin") && plugin.getConfig().getBoolean("enable.updater") == true)
+        {
             if(isAvailable)
+            {
         event.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', "&cUpdate: &fAn update is ready for you:"));
         event.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', "&chttps://www.spigotmc.org/resources/simple-advertising.40414/updates"));
         Utils.sendSound(event.getPlayer());
+            }
+        }
     }
 
     public void check() {

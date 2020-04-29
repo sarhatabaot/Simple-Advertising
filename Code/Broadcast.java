@@ -96,7 +96,7 @@ public class Broadcast implements CommandExecutor {
             			a = a.replace("{message}", broadcastMsg);
             			a = ChatColor.translateAlternateColorCodes('&', a);
             			p.sendTitle(s, a, fadein, stay, fadeout);
-            			p.playSound(p.getLocation(), Sound.BLOCK_NOTE_PLING, 1, 1F);
+            			Utils.sendSound(p);
                     		}
             			}
             	}

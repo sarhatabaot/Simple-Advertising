@@ -16,7 +16,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
-import com.Moshu.Essentials.Points;
 import com.earth2me.essentials.Essentials;
 
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -35,6 +34,27 @@ public class Advertising implements CommandExecutor {
 		this.plugin = plugin;
 	}
 	
+	public static String currentad = "none";
+	
+	public static String getCurrentAd()
+	{
+		return currentad;
+	}
+	
+	public static String currentpl = "none";
+	
+	public static String getCurrentAdPlayer()
+	{
+		return currentpl;
+	}
+	
+	public static boolean activead = false;
+	
+	public static boolean isAnAdLive()
+	{
+		return activead;
+	}
+	
 	Date date = new Date();
 	SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy / HH:mm:ss");
 	String prefix; 
@@ -48,6 +68,8 @@ public class Advertising implements CommandExecutor {
 	String advertisingFormat;
 	String noPoints;
 	
+	int id;
+	
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
 	{
 		
@@ -57,7 +79,7 @@ public class Advertising implements CommandExecutor {
 	    
 		if(!(sender instanceof Player))
 		{
-			Utils.sendNotPlayer(sender);
+			Utils.sendNotPlayer(); 
 			return true;
 		}
 		
@@ -214,14 +236,23 @@ public class Advertising implements CommandExecutor {
             p.sendMessage(ChatColor.translateAlternateColorCodes('&', prefix + noMoney));
           	Utils.logToFile(format.format(date) + " - " + "Warn > " + sender.getName() + " didn't have enough money.");
             return true;
-          } 
+        } 
+      	
+      	if(activead && !plugin.getConfig().get("advertising.stay").equals("permanent"))
+      	{
+      		p.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("messages.active-ad")));
+      		return true;
+      	}
 		
       	   @SuppressWarnings("deprecation")
       	   
-			EconomyResponse r = econ.withdrawPlayer(p.getName(), price);		  
+			EconomyResponse r = econ.withdrawPlayer(p.getName(), price);	
+      	   
               if (r.transactionSuccess()) 
               {           
           	  
+            	  final 
+            	  String mesajf;
             	  String mesaj;
             	  mesaj = "";
             		for (String a : args)
@@ -231,15 +262,77 @@ public class Advertising implements CommandExecutor {
             		
             	  mesaj = mesaj.trim(); 
                  
-              for (Player player : Bukkit.getOnlinePlayers()) 
-              {
-	            
-                advertisingFormat = advertisingFormat.replace("{message}", mesaj);
-                advertisingFormat = advertisingFormat.replace("{player}", p.getName());
-                advertisingFormat = advertisingFormat.replace("{prefix}", prefix);
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', advertisingFormat));
-                
-              }
+            	  mesajf = mesaj;
+            	  
+            	  
+            	  if(Utils.isInt(plugin.getConfig().getString("advertising.stay")))
+            	  {
+            	  if(plugin.getConfig().getInt("advertising.stay") > 0 && plugin.getConfig().getInt("advertising.repeat") > 0)
+        	  	  {
+        	  	
+        	  		  id = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable()
+        	  		 
+        	  		  {
+        	  			  
+        	  		    	int i = 0;
+        	  		
+        	  			  public void run()
+        	  			  {
+        	  			  
+        	  		
+        		  			  if(i <= plugin.getConfig().getInt("advertising.stay") / plugin.getConfig().getInt("advertising.repeat"))
+        		  			  {
+        		  			  
+        		      			  for (Player player : Bukkit.getOnlinePlayers()) 
+        				              {
+        					            
+        				                advertisingFormat = advertisingFormat.replace("{message}", mesajf);
+        				                advertisingFormat = advertisingFormat.replace("{player}", p.getName());
+        				                advertisingFormat = advertisingFormat.replace("{prefix}", prefix);
+        				                player.sendMessage(ChatColor.translateAlternateColorCodes('&', advertisingFormat));
+        				                
+        				              }
+        		      			  i++;
+        		  			  }
+        		  			  else
+        		  			  {
+        		  				  Bukkit.getScheduler().cancelTask(id);
+        		  			  }
+        	  			  }
+        	  			  
+        	  		  }, 0, plugin.getConfig().getInt("advertising.repeat") * 20); 
+            		  
+            	  }
+            	  else
+            	  {
+            		  
+		              for (Player player : Bukkit.getOnlinePlayers()) 
+		              {
+			            
+		                advertisingFormat = advertisingFormat.replace("{message}", mesaj);
+		                advertisingFormat = advertisingFormat.replace("{player}", p.getName());
+		                advertisingFormat = advertisingFormat.replace("{prefix}", prefix);
+		                player.sendMessage(ChatColor.translateAlternateColorCodes('&', advertisingFormat));
+		                
+		              }
+              
+            	  }
+            	  }
+            		else
+        	      	{
+        	      		for (Player player : Bukkit.getOnlinePlayers()) 
+        	            {
+        		            
+        	              advertisingFormat = advertisingFormat.replace("{message}", mesaj);
+        	              advertisingFormat = advertisingFormat.replace("{player}", p.getName());
+        	              advertisingFormat = advertisingFormat.replace("{prefix}", prefix);
+        	              player.sendMessage(ChatColor.translateAlternateColorCodes('&', advertisingFormat));
+        	              
+        	            }
+        	      	}
+              
+              currentad = mesaj;
+              currentpl = p.getName();
                   
               UUID uuid = p.getUniqueId();
               
@@ -248,10 +341,12 @@ public class Advertising implements CommandExecutor {
                   String priceToString = Integer.toString(price);
                   succes = succes.replace("{price}", priceToString);
                   p.sendMessage(ChatColor.translateAlternateColorCodes('&', succes));
+                  
                   if(plugin.getConfig().getString("enable.logging").equalsIgnoreCase("true"))
                   {
                   Utils.logToFile(format.format(date) + " (Advertising) " + mesaj + " . Made by: " + p.getName());
                   }
+                  
 	              cooldown.add(p.getName());
        
 	                Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() 
@@ -259,11 +354,24 @@ public class Advertising implements CommandExecutor {
 	                	public void run() {
 	                		cooldown.remove(p.getName());		
 	                	}
-	                }, cooldownTime);                  
+	                }, cooldownTime);      
+	                
+	                activead = true;
+	                
+	                if(plugin.getConfig().getInt("advertising.stay") > 0)
+	                {
+	                	Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() 
+		                {
+		                	public void run() {
+		                		activead = false;
+		                	}
+		                }, plugin.getConfig().getInt("advertising.stay") * 20);    
+	                }
                  
                   Utils.sendSound(p);
               
-              } else 
+              } 
+              else 
               {
                   
               	p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cSomething went wrong.."));
@@ -292,8 +400,14 @@ public class Advertising implements CommandExecutor {
         		return true;
         	}
         	
-        	AdvertisingPoints.takePoints(p, price);
+        	if(activead && !plugin.getConfig().get("advertising.stay").equals("permanent"))
+          	{
+          		p.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("messages.active-ad")));
+          		return true;
+          	}
         	
+        	AdvertisingPoints.takePoints(p, price);
+        	final String mesajf;
         	String mesaj;
       	     mesaj = "";
       		for (String a : args)
@@ -302,17 +416,79 @@ public class Advertising implements CommandExecutor {
       		}
       		
       	  mesaj = mesaj.trim(); 
-           
-        for (Player player : Bukkit.getOnlinePlayers()) 
-        {
-          
-          advertisingFormat = advertisingFormat.replace("{message}", mesaj);
-          advertisingFormat = advertisingFormat.replace("{player}", p.getName());
-          advertisingFormat = advertisingFormat.replace("{prefix}", prefix);
-          player.sendMessage(ChatColor.translateAlternateColorCodes('&', advertisingFormat));
-          
-        }
-
+	           
+	      	mesajf = mesaj;
+	  	  
+	      	if(Utils.isInt(plugin.getConfig().getString("advertising.stay")))
+      	  {
+	  	  if(plugin.getConfig().getInt("advertising.stay") > 0 && plugin.getConfig().getInt("advertising.repeat") > 0)
+	  	  {
+	  	
+	  		  id = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable()
+	  		 
+	  		  {
+	  			  
+	  		    	int i = 0;
+	  		
+	  			  public void run()
+	  			  {
+	  			  
+	  		
+		  			  if(i <= plugin.getConfig().getInt("advertising.stay") / plugin.getConfig().getInt("advertising.repeat"))
+		  			  {
+		  			  
+		      			  for (Player player : Bukkit.getOnlinePlayers()) 
+				              {
+					            
+				                advertisingFormat = advertisingFormat.replace("{message}", mesajf);
+				                advertisingFormat = advertisingFormat.replace("{player}", p.getName());
+				                advertisingFormat = advertisingFormat.replace("{prefix}", prefix);
+				                player.sendMessage(ChatColor.translateAlternateColorCodes('&', advertisingFormat));
+				                
+				              }
+		      			  i++;
+		  			  }
+		  			  else
+		  			  {
+		  				  Bukkit.getScheduler().cancelTask(id);
+		  				  return;
+		  			  }
+	  			  }
+	  			  
+	  		  }, 0, plugin.getConfig().getInt("advertising.repeat") * 20); 
+	  		  
+	  	  }
+	  	  else
+	  	  {
+	  		  
+	            for (Player player : Bukkit.getOnlinePlayers()) 
+	            {
+		            
+	              advertisingFormat = advertisingFormat.replace("{message}", mesaj);
+	              advertisingFormat = advertisingFormat.replace("{player}", p.getName());
+	              advertisingFormat = advertisingFormat.replace("{prefix}", prefix);
+	              player.sendMessage(ChatColor.translateAlternateColorCodes('&', advertisingFormat));
+	              
+	            }
+	    
+	            
+	  	  }
+	  	  }
+	      	else
+	      	{
+	      		for (Player player : Bukkit.getOnlinePlayers()) 
+	            {
+		            
+	              advertisingFormat = advertisingFormat.replace("{message}", mesaj);
+	              advertisingFormat = advertisingFormat.replace("{player}", p.getName());
+	              advertisingFormat = advertisingFormat.replace("{prefix}", prefix);
+	              player.sendMessage(ChatColor.translateAlternateColorCodes('&', advertisingFormat));
+	              
+	            }
+	      	}
+	    
+	    currentad = mesaj;
+	    currentpl = p.getName();
         
         Utils.addToData(uuid, mesaj);
         
@@ -331,7 +507,19 @@ public class Advertising implements CommandExecutor {
               	public void run() {
               		cooldown.remove(p.getName());		
               	}
-              }, cooldownTime);                  
+              }, cooldownTime);        
+              
+              activead = true;
+              
+              if(plugin.getConfig().getInt("advertising.stay") > 0)
+              {
+              	Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() 
+	                {
+	                	public void run() {
+	                		activead = false;
+	                	}
+	                }, plugin.getConfig().getInt("advertising.stay"));    
+              }
            
             Utils.sendSound(p);
         	

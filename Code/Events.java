@@ -17,6 +17,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
@@ -101,7 +102,7 @@ public class Events implements Listener {
 	}
 	
 	@EventHandler(priority = EventPriority.HIGH)
-	public void onChat(AsyncPlayerChatEvent e)
+	public void onChat(PlayerChatEvent e)
 	{
 		Player p = e.getPlayer();
 		RegisteredServiceProvider rsp = Bukkit.getServer().getServicesManager().getRegistration(Economy.class);  	 
@@ -246,13 +247,19 @@ public class Events implements Listener {
 	    	return;
 	    }
 	    
-		if(e.getClickedInventory().getTitle().equals(title))
+		if(e.getView().getTitle().equals(title))
 		{
 			e.setCancelled(true);
 			
 			if((e.getCurrentItem() == null) || (e.getCurrentItem().getType().equals(Material.AIR)))
 			{
 		    return;
+			}
+			
+			if(e.getClickedInventory().equals(e.getView().getBottomInventory()))
+			{
+				e.setCancelled(true);
+				return;
 			}
 			
 			if(e.getSlot() == 4)

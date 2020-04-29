@@ -1,12 +1,11 @@
 
 ###############################################################################################
 ##
-##  SimpleAdvertising, 1.9.4. Made by Moshu
+##  SimpleAdvertising, 28.04.2020 Made by Moshu
 ##  > Change-log:
-## - Fixed bug with /ad reload
-## - Added /ad debug - Sends you debug info
-## - Plugin now checks for dependencies and shuts down if it doesn't find them
-## - Code optimisations
+## - Added TabCompleter
+## - Updated dependencies
+## - Changed default config value for Sound
 ## Enjoy! :3
 ##
 ##
@@ -30,7 +29,13 @@ advertising:
   economy: "money"
   cooldown: 10
   price: 100
-  sound: BLOCK_NOTE_PLING
+  stay: 0
+  #Stay or how much an ad stays live (in seconds)
+  #Set to "permanent" to be active until another person sends an ad.
+  repeat: 0
+  #If the ad should repeat if stay is more than 0
+  #at what interval should it be sent (in seconds)
+  sound: BLOCK_NOTE_BLOCK_PLING
 #Vaild economy types: money, points.
 
 points:
@@ -118,6 +123,7 @@ messages:
   no-money: "You don't have enough money"
   no-points: "You don't have enough points"
   cooldown-message: "You have to wait before posting another advertisment"
+  active-ad: "There is an ad already up for display. Wait your turn"
   transaction-cancelled: "&oTransaction cancelled, thank you for your time"
   dialog: "&oType in chat your desired ad, or type &ccancel &f&oto cancel the transaction"
   empty-message: "&fHey! You forgot the message"

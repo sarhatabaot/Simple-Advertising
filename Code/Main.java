@@ -2,6 +2,9 @@ package com.Moshu.SimpleAdvertising;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.Callable;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -83,6 +86,13 @@ public class Main extends JavaPlugin {
 	public Debug getDebugClass()
 	{
 		return dbg;
+	}
+	
+	Placeholders pls = new Placeholders(this);
+	
+	public Placeholders getPlaceholdersClass()
+	{
+		return pls;
 	}
 	
 	
@@ -167,6 +177,7 @@ public class Main extends JavaPlugin {
 	    up.check();
 	    
 	    createFiles();
+	    metrics();
 	   
 	    if(getConfig().getBoolean("auto-advertiser.chat") == true)
 	    {
@@ -185,12 +196,19 @@ public class Main extends JavaPlugin {
 	    getCommand("broadcast").setExecutor(bc);
 	    getCommand("points").setExecutor(pts);
 	    
+	    getCommand("ad").setTabCompleter(new TabComplete());
+	    getCommand("points").setTabCompleter(new TabComplete());
+	    
 	    Bukkit.getServer().getPluginManager().registerEvents(evn, this);
 	    Bukkit.getServer().getPluginManager().registerEvents(up, this);
 	    
 	    RegisteredServiceProvider rsp = this.getServer().getServicesManager().getRegistration(Economy.class);
       	 
-        econ = (Economy)rsp.getProvider();
+        econ = (Economy) rsp.getProvider();
+        
+        if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null){
+            new Placeholders(this).register();
+      }
 	    
 	}
 	
@@ -198,6 +216,20 @@ public class Main extends JavaPlugin {
 	{
 		Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&cSimpleAdvertising &fis disabling")); 
 	}
+	
+	public void metrics()
+	{
+				
+		int pluginId = 7360; 
+        Metrics metrics = new Metrics(this, pluginId);
+        
+        if(metrics.isEnabled())
+        {
+    		Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&c&lMetrics: &fMetrics are enabled"));
+        }
+        
+	}
+	
 	
 	 public boolean setupEconomy() 
 	 {
