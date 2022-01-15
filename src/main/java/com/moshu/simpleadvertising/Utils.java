@@ -108,33 +108,31 @@ public class Utils {
             p.openInventory(inv);
 
             return;
-        } else {
-
-            Inventory inv = Bukkit.createInventory(null, 9, title);
-
-            ItemStack itm = new ItemStack(m);
-            ItemMeta meta = itm.getItemMeta();
-
-            meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', name));
-
-            List<String> strings = new ArrayList<>();
-            for (String string : plugin.getConfig().getStringList("gui.item-lore")) {
-                String pret = Integer.toString(price);
-                string = string.replace("{price}", pret);
-                strings.add(ChatColor.translateAlternateColorCodes('&', string));
-            }
-
-            meta.setLore(strings);
-
-            itm.setItemMeta(meta);
-
-            inv.setItem(4, itm);
-
-            p.openInventory(inv);
-
-            //Insert admin panel here
         }
 
+        Inventory inv = Bukkit.createInventory(null, 9, title);
+
+        ItemStack itm = new ItemStack(m);
+        ItemMeta meta = itm.getItemMeta();
+
+        meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', name));
+
+        List<String> strings = new ArrayList<>();
+        for (String string : plugin.getConfig().getStringList("gui.item-lore")) {
+            String pret = Integer.toString(price);
+            string = string.replace("{price}", pret);
+            strings.add(ChatColor.translateAlternateColorCodes('&', string));
+        }
+
+        meta.setLore(strings);
+
+        itm.setItemMeta(meta);
+
+        inv.setItem(4, itm);
+
+        p.openInventory(inv);
+
+        //Insert admin panel here
     }
 
     public static void addToData(UUID uuid, String ad) {
@@ -232,8 +230,8 @@ public class Utils {
                     saveTo.createNewFile();
                 }
 
-                try (FileWriter fw = new FileWriter(saveTo, true)){
-                    try (PrintWriter pw = new PrintWriter(fw)){
+                try (FileWriter fw = new FileWriter(saveTo, true)) {
+                    try (PrintWriter pw = new PrintWriter(fw)) {
                         pw.println(message);
                         pw.flush();
                     }
