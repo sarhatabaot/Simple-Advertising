@@ -1,4 +1,4 @@
-package com.Moshu.SimpleAdvertising;
+package com.moshu.simpleadvertising;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;

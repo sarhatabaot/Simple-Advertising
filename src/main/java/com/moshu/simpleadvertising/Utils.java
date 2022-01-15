@@ -1,4 +1,4 @@
-package com.Moshu.SimpleAdvertising;
+package com.moshu.simpleadvertising;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -18,14 +18,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.plugin.RegisteredServiceProvider;
-
-import net.milkbowl.vault.economy.Economy;
 
 public class Utils {
 

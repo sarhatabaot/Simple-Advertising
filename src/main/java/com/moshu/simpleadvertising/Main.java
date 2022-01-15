@@ -1,4 +1,4 @@
-package com.Moshu.SimpleAdvertising;
+package com.moshu.simpleadvertising;
 
 import java.io.File;
 import java.io.IOException;

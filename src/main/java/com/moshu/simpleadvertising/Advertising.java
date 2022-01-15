@@ -1,4 +1,4 @@
-package com.Moshu.SimpleAdvertising;
+package com.moshu.simpleadvertising;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -7,21 +7,14 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 import com.earth2me.essentials.Essentials;
 
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.ComponentBuilder;
-import net.md_5.bungee.api.chat.HoverEvent;
-import net.md_5.bungee.api.chat.TextComponent;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 
@@ -132,11 +125,11 @@ public class Advertising implements CommandExecutor {
             
        		  sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "       &8&l---------- &f&l( &bSimpleAdvertising &f&l) &8&l----------"));
        		  sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&8&l- &bCommands:"));
-       		  sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&l&8* &c/ad (Message) &l&8» &bMakes a public ad"));
-       		  sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&l&8* &c/ad reload &l&8» &bReloads the plugin"));
-       		  sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&l&8* &c/ad help &l&8» &bShows this page"));
-       		  sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&l&8* &c/ad debug &l&8» &bShows debug info"));
-       		  sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&l&8* &c/broadcast &l&8» &bBroadcast using this plugin"));
+       		  sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&l&8* &c/ad (Message) &l&8ï¿½ &bMakes a public ad"));
+       		  sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&l&8* &c/ad reload &l&8ï¿½ &bReloads the plugin"));
+       		  sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&l&8* &c/ad help &l&8ï¿½ &bShows this page"));
+       		  sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&l&8* &c/ad debug &l&8ï¿½ &bShows debug info"));
+       		  sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&l&8* &c/broadcast &l&8ï¿½ &bBroadcast using this plugin"));
        		  sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&eFor further help check out this page: &6https://www.spigotmc.org/resources/simple-advertising.40414/"));
        		  Utils.sendSound(p);
        		  return true;

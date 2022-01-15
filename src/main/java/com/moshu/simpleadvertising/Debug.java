@@ -1,9 +1,8 @@
-package com.Moshu.SimpleAdvertising;
+package com.moshu.simpleadvertising;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginDescriptionFile;
 

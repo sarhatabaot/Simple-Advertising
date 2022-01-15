@@ -1,24 +1,26 @@
-package com.Moshu.SimpleAdvertising;
+package com.moshu.simpleadvertising;
 
 import java.io.File;
 import java.io.IOException;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import com.Moshu.Essentials.Utils;
+
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 
-public class AdvertisingPoints implements CommandExecutor {
+public class Points implements CommandExecutor {
 
 	static int points;
 	private static Main plugin;
 	
-	public AdvertisingPoints(Main plugin)
+	public Points(Main plugin)
 	{
 		this.plugin = plugin;
 	}
@@ -102,7 +104,7 @@ public class AdvertisingPoints implements CommandExecutor {
 	{
 		if(!(sender instanceof Player))
 		{
-			Utils.sendNotPlayer();
+			Utils.sendNotPlayer(sender);
 			return true;
 		}
 		
@@ -117,18 +119,8 @@ public class AdvertisingPoints implements CommandExecutor {
 		if(args.length == 0)
 		{
 			
-			String z = plugin.getConfig().getString("points.messages.look-points.title");
-			int i = lookPoints(p);
-			
-	     	z = z.replace("{player}", p.getName());
-	     	z = z.replace("{points}", Integer.toString(i));
-	     	z = z.replace("{prefix}", prefix);
-	     	z = ChatColor.translateAlternateColorCodes('&', z);
-	     	
-			String m = ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("points.messages.look-points.subtitle"));
-	     	m = m.replace("{player}", p.getName());
-	     	m = m.replace("{points}", Integer.toString(i));
-	     	m = m.replace("{prefix}", prefix);
+			String z = ChatColor.translateAlternateColorCodes('&', "&cMomentan ai");
+			String m = ChatColor.translateAlternateColorCodes('&', "Disponibile &c" + lookPoints(p) + "&f puncte");
 			
 			p.sendTitle(z, m, fadein, stay, fadeout);
 			return true;
@@ -152,38 +144,17 @@ public class AdvertisingPoints implements CommandExecutor {
 				
 				for(Player s : Bukkit.getOnlinePlayers())
 				{
+					givePoints(s, i);
 					
+					String z = ChatColor.translateAlternateColorCodes('&', "&c" + p.getName() + "&f a dat tuturor");
+					String m = ChatColor.translateAlternateColorCodes('&', "&c" + i + "&f puncte");
 					
-					String z = ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("points.messages.give-all-points.received.title"));
-					
-					z = z.replace("{player}", p.getName());
-			     	z = z.replace("{points}", Integer.toString(i));
-			     	z = z.replace("{prefix}", prefix);	     	
-					
-			     	String m = ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("points.messages.give-all-points.received.subtitle"));
-					
-					m = m.replace("{player}", p.getName());
-			     	m = m.replace("{points}", Integer.toString(i));
-			     	m = m.replace("{prefix}", prefix);
-					
-
-	     	    	 p.sendTitle(z, m, fadein, stay, fadeout);
-	     	    	 givePoints(s, i);
-
+					p.sendTitle(z, m, fadein, stay, fadeout);
 					
 				}
 				
-				String z = ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("points.messages.give-all-points.sent.title"));
-				
-				z = z.replace("{player}", p.getName());
-		     	z = z.replace("{points}", Integer.toString(i));
-		     	z = z.replace("{prefix}", prefix);
-				
-		     	String m = ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("points.messages.give-all-points.sent.subtitle"));
-				
-				m = m.replace("{player}", p.getName());
-		     	m = m.replace("{points}", Integer.toString(i));
-		     	m = m.replace("{prefix}", prefix);
+				String z = ChatColor.translateAlternateColorCodes('&', "&fAi trimis tuturor jucatorilor");
+				String m = ChatColor.translateAlternateColorCodes('&', "&c" + i + "&f puncte");
 				
 				p.sendTitle(z, m, fadein, stay, fadeout);
 				
@@ -205,32 +176,16 @@ public class AdvertisingPoints implements CommandExecutor {
 			
 			givePoints(t, i);
 			
-			String z = ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("points.messages.give-points.title"));
+			String d = ChatColor.translateAlternateColorCodes('&', "&cPoints");
+			String a = ChatColor.translateAlternateColorCodes('&', "&fAi primit &c" + i + "&f puncte &c(/pshop)");
 			
-			z = z.replace("{player}", p.getName());
-	     	z = z.replace("{points}", Integer.toString(i));
-	     	z = z.replace("{prefix}", prefix);
+			p.sendTitle(d, a, fadein, stay, fadeout);
 			
-	     	String m = ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("points.messages.give-points.subtitle"));
+			String z = ChatColor.translateAlternateColorCodes('&', "&fI-ai dat lui &c" + t.getName());
+			String m = ChatColor.translateAlternateColorCodes('&', "&c" + i + "&f puncte");
 			
-			m = m.replace("{player}", p.getName());
-	     	m = m.replace("{points}", Integer.toString(i));
-	     	m = m.replace("{prefix}", prefix);
+			p.sendTitle(z, m, fadein, stay, fadeout);
 			
-			String s = ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("points.messages.receive-points.title"));
-			
-			s = s.replace("{player}", p.getName());
-	     	s = s.replace("{points}", Integer.toString(i));
-	     	s = s.replace("{prefix}", prefix);
-			
-	     	String j = ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("points.messages.receive-points.subtitle"));
-			
-			j = j.replace("{player}", p.getName());
-	     	j = j.replace("{points}", Integer.toString(i));
-	     	j = j.replace("{prefix}", prefix);
-			
-                     p.sendTitle(z, m, fadein, stay, fadeout);
-	     			 t.sendTitle(s, j, fadein, stay, fadeout); 		
 			}
 			
 			else
@@ -275,8 +230,8 @@ public class AdvertisingPoints implements CommandExecutor {
 				
 				if(lookPoints(t) < i)
 				{
-					String message2 = ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("points.messages.insufficient-points")); 
-					p.sendMessage(message2);	
+					String message2 = ChatColor.translateAlternateColorCodes('&', "&8(&fJucatorul are doar &c" + lookPoints(p) + " &fpuncte" + "&8)");
+					p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(message2));	
 					return true;
 				}
 			

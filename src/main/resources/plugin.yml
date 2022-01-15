@@ -1,6 +1,6 @@
-main: com.Moshu.SimpleAdvertising.Main
+main: com.moshu.simpleadvertising.Main
 name: SimpleAdvertising
-version: 29.4.20
+version: ${project.version}
 author: Moshu
 website: http://mc.b-zone.ro
 softdepend: [Essentials, Vault, PlaceholderAPI]

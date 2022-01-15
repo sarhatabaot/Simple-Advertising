@@ -1,8 +1,9 @@
-package com.Moshu.SimpleAdvertising;
+package com.moshu.simpleadvertising;
 
 import org.bukkit.entity.Player;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
+import org.jetbrains.annotations.NotNull;
 
 public class Placeholders extends PlaceholderExpansion {
 
@@ -14,7 +15,7 @@ public class Placeholders extends PlaceholderExpansion {
 	}
 	
 	@Override
-	public String getAuthor() {
+	public @NotNull String getAuthor() {
 	
 		return "Moshu";
 	}
