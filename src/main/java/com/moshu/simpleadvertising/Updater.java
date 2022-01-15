@@ -18,16 +18,13 @@ import org.bukkit.event.player.PlayerJoinEvent;
 public class Updater implements Listener {
 
     private static Main plugin;
+    private final String url = "https://api.spigotmc.org/legacy/update.php?resource=";
+    private final String id = "40414";
 
+    private boolean isAvailable;
     public Updater(Main plugin) {
         this.plugin = plugin;
     }
-
-
-    private String url = "https://api.spigotmc.org/legacy/update.php?resource=";
-    private String id = "40414";
-
-    private boolean isAvailable;
 
     public boolean isAvailable() {
         return isAvailable;
@@ -35,12 +32,10 @@ public class Updater implements Listener {
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
-        if (event.getPlayer().hasPermission("simplead.admin") && plugin.getConfig().getBoolean("enable.updater") == true) {
-            if (isAvailable) {
-                event.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', "&cUpdate: &fAn update is ready for you:"));
-                event.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', "&chttps://www.spigotmc.org/resources/simple-advertising.40414/updates"));
-                Utils.sendSound(event.getPlayer());
-            }
+        if (event.getPlayer().hasPermission("simplead.admin") && plugin.getConfig().getBoolean("enable.updater") && isAvailable) {
+            event.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', "&cUpdate: &fAn update is ready for you:"));
+            event.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', "&chttps://www.spigotmc.org/resources/simple-advertising.40414/updates"));
+            Utils.sendSound(event.getPlayer());
         }
     }
 
