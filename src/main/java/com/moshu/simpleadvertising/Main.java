@@ -2,10 +2,13 @@ package com.moshu.simpleadvertising;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.Callable;
 
+import com.moshu.simpleadvertising.commands.Advertising;
+import com.moshu.simpleadvertising.commands.AdvertisingPoints;
+import com.moshu.simpleadvertising.commands.Broadcast;
+import com.moshu.simpleadvertising.commands.TabComplete;
+import com.moshu.simpleadvertising.utils.Updater;
+import com.moshu.simpleadvertising.utils.Utils;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -17,91 +20,29 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import net.milkbowl.vault.economy.Economy;
+import org.jetbrains.annotations.Debug;
 
 public class Main extends JavaPlugin implements Listener {
-
     Economy econ;
-
-    Advertising ad = new Advertising(this);
-
-    public Advertising getAdvertisingClass() {
-        return ad;
-    }
-
-    Broadcast bc = new Broadcast(this);
-
-    public Broadcast getBroadcastClass() {
-        return bc;
-    }
-
-    Events evn = new Events(this);
-
-    public Events getEventsClass() {
-        return evn;
-    }
-
-    Utils ut = new Utils(this);
-
-    public Utils getUtilsClass() {
-        return ut;
-    }
-
-    Updater up = new Updater(this);
-
-    public Updater getUpdaterClass() {
-        return up;
-    }
-
-    AutoMessage am = new AutoMessage(this);
-
-    public AutoMessage getAutoMessageClass() {
-        return am;
-    }
-
-    AutoTitles at = new AutoTitles(this);
-
-    public AutoTitles getAutoTitlesClass() {
-        return at;
-    }
-
-    AdvertisingPoints pts = new AdvertisingPoints(this);
-
-    public AdvertisingPoints getPointsClass() {
-        return pts;
-    }
-
-    Debug dbg = new Debug(this);
-
-    public Debug getDebugClass() {
-        return dbg;
-    }
-
-    Placeholders pls = new Placeholders(this);
-
-    public Placeholders getPlaceholdersClass() {
-        return pls;
-    }
 
 
     public boolean hasDependencies() {
-
-
         if (Bukkit.getPluginManager().getPlugin("Vault") == null) {
-            return false;
-        } else if (Bukkit.getPluginManager().getPlugin("EssentialsX") == null && Bukkit.getPluginManager().getPlugin("Essentials") == null) {
-            return false;
-        } else if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") == null) {
             return false;
         }
 
+        if (Bukkit.getPluginManager().getPlugin("EssentialsX") == null && Bukkit.getPluginManager().getPlugin("Essentials") == null) {
+            return false;
+        }
+        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") == null) {
+            return false;
+        }
         return true;
     }
-
 
     public static void consoleMessage(String s) {
         Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', s));
@@ -133,30 +74,34 @@ public class Main extends JavaPlugin implements Listener {
 
 	@Override
     public void onEnable() {
-
-        PluginDescriptionFile pdfFile = getDescription();
-
-        String msg = ChatColor.translateAlternateColorCodes('&', "&cSimpleAdvertising &fstarted successfuly");
-        String msg1 = ChatColor.translateAlternateColorCodes('&', "&fVersion: &c" + pdfFile.getVersion());
-        String msg2 = ChatColor.translateAlternateColorCodes('&', "&cFor news: &7https://www.spigotmc.org/resources/simple-advertising.40414/");
-        String msg4 = ChatColor.translateAlternateColorCodes('&', "&fMade by &cMoshu&f, this is the real deal.");
+        final String msg = ChatColor.translateAlternateColorCodes('&', "&cSimpleAdvertising &fstarted successfuly");
+        final String msg1 = ChatColor.translateAlternateColorCodes('&', "&fVersion: &c" + getDescription().getVersion());
+        final String msg2 = ChatColor.translateAlternateColorCodes('&', "&cFor news: &7https://www.spigotmc.org/resources/simple-advertising.40414/");
+        final String msg4 = ChatColor.translateAlternateColorCodes('&', "&fMade by &cMoshu&f, this is the real deal.");
 
         Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&c&l* " + msg));
         Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&c&l* " + msg1));
         Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&c&l* " + msg2));
         Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&c&l* " + msg4));
 
-
+        Advertising ad = new Advertising(this);
+        Broadcast bc = new Broadcast(this);
+        Events evn = new Events(this);
+        Utils ut = new Utils(this);
+        Updater up = new Updater(this);
+        AutoMessage am = new AutoMessage(this);
+        AutoTitles at = new AutoTitles(this);
+        AdvertisingPoints pts = new AdvertisingPoints(this);
         up.check();
 
         createFiles();
         new Metrics(this, 7360);
 
-        if (getConfig().getBoolean("auto-advertiser.chat") == true) {
+        if (getConfig().getBoolean("auto-advertiser.chat")) {
             am.start();
         }
 
-        if (getConfig().getBoolean("auto-advertiser.titles") == true) {
+        if (getConfig().getBoolean("auto-advertiser.titles")) {
             at.start();
         }
 
@@ -187,35 +132,31 @@ public class Main extends JavaPlugin implements Listener {
         Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&cSimpleAdvertising &fis disabling"));
     }
 
-    public boolean setupEconomy() {
+    private boolean setupEconomy() {
         if (getServer().getPluginManager().getPlugin("Vault") == null) {
             return false;
         }
-
         RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
         if (rsp == null) {
             return false;
         }
-        econ = (Economy) rsp.getProvider();
-        if (econ != null) {
-            return true;
-        }
-        return false;
+        econ = rsp.getProvider();
+        return econ != null;
     }
 
     public FileConfiguration getData() {
         return this.data;
     }
 
-    private File dataf;
+    private File dataFile;
     private FileConfiguration data;
 
     public void createFiles() {
 
-        dataf = new File(getDataFolder(), "data.yml");
+        dataFile = new File(getDataFolder(), "data.yml");
 
-        if (!dataf.exists()) {
-            dataf.getParentFile().mkdirs();
+        if (!dataFile.exists()) {
+            dataFile.getParentFile().mkdirs();
             saveResource("data.yml", false);
             Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&6&l* &cData.yml &fnot found, creating."));
         }
@@ -223,38 +164,28 @@ public class Main extends JavaPlugin implements Listener {
         data = new YamlConfiguration();
 
         try {
-
             try {
-                data.load(dataf);
+                data.load(dataFile);
             } catch (InvalidConfigurationException e) {
-
                 e.printStackTrace();
             }
-
-
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public static void reloadFiles() {
-        Plugin pl = Bukkit.getPluginManager().getPlugin("SimpleAdvertising");
+        final Plugin plugin = Bukkit.getPluginManager().getPlugin("SimpleAdvertising");
+        File configFile = new File(plugin.getDataFolder(), "config.yml");
 
-        File configf = new File(pl.getDataFolder(), "config.yml");
-
-        YamlConfiguration config = YamlConfiguration.loadConfiguration(configf);
+        YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
 
         try {
-
-            config.save(configf);
-
+            config.save(configFile);
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        config = YamlConfiguration.loadConfiguration(configf);
-
-
+        config = YamlConfiguration.loadConfiguration(configFile);
     }
 
 }

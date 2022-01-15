@@ -1,4 +1,4 @@
-package com.moshu.simpleadvertising;
+package com.moshu.simpleadvertising.utils;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -14,6 +14,7 @@ import javax.management.AttributeList;
 import javax.management.MBeanServer;
 import javax.management.ObjectName;
 
+import com.moshu.simpleadvertising.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -244,6 +245,11 @@ public class Utils {
 
         }
 
+    }
+
+
+    public static String color(final String message) {
+        return ChatColor.translateAlternateColorCodes('&',message);
     }
 
 

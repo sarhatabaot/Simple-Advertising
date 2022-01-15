@@ -1,4 +1,4 @@
-package com.moshu.simpleadvertising;
+package com.moshu.simpleadvertising.commands;
 
 import java.util.ArrayList;
 import java.util.Collections;

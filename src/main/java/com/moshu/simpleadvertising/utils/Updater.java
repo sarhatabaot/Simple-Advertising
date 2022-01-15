@@ -1,14 +1,13 @@
-package com.moshu.simpleadvertising;
+package com.moshu.simpleadvertising.utils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
 import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import com.moshu.simpleadvertising.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
@@ -62,11 +61,10 @@ public class Updater implements Listener {
             if (!localVersion.equalsIgnoreCase(remoteVersion)) {
                 Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&cUpdate: &fAn update is ready for you:"));
                 Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&chttps://www.spigotmc.org/resources/simple-advertising.40414/updates"));
-                return true;
             } else {
                 Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&cUpdate: &fYour version is up to date"));
-                return true;
             }
+            return true;
 
         } catch (IOException e) {
             Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&cUpdate: &fThere was a problem checking the updates."));
