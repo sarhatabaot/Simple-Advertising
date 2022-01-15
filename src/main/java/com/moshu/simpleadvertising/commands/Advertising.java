@@ -100,86 +100,6 @@ public class Advertising implements CommandExecutor {
         }
 
         if (args.length >= 1) {
-
-            if (args[0].equalsIgnoreCase("help")) {
-
-                if (!p.hasPermission("simplead.help")) {
-                    Utils.sendNoAccess(p);
-                    Utils.sendSound(p);
-                    return true;
-                }
-
-                if (args.length > 1) {
-                    return true;
-                }
-
-                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "       &8&l---------- &f&l( &bSimpleAdvertising &f&l) &8&l----------"));
-                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&8&l- &bCommands:"));
-                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&l&8* &c/ad (Message) &l&8� &bMakes a public ad"));
-                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&l&8* &c/ad reload &l&8� &bReloads the plugin"));
-                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&l&8* &c/ad help &l&8� &bShows this page"));
-                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&l&8* &c/ad debug &l&8� &bShows debug info"));
-                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&l&8* &c/broadcast &l&8� &bBroadcast using this plugin"));
-                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&eFor further help check out this page: &6https://www.spigotmc.org/resources/simple-advertising.40414/"));
-                Utils.sendSound(p);
-                return true;
-            } else if (args[0].equalsIgnoreCase("debug")) {
-
-                if (!p.hasPermission("simplead.debug")) {
-                    Utils.sendNoAccess(p);
-                    Utils.sendSound(p);
-                    return true;
-                }
-
-                sendServerInfo(p);
-
-            } else if (args[0].equalsIgnoreCase("bal") || args[0].equalsIgnoreCase("balance") || args[0].equalsIgnoreCase("points")) {
-                if (!p.hasPermission("simplead.points")) {
-                    Utils.sendNoAccess(p);
-                    Utils.sendSound(p);
-                    return true;
-                }
-
-                if (args.length > 1) {
-                    return true;
-                }
-
-                String str = plugin.getConfig().getString("messages.balance");
-                int bl = AdvertisingPoints.lookPoints(p);
-                String s = Integer.toString(bl);
-                str = str.replace("{points}", s);
-                p.sendMessage(ChatColor.translateAlternateColorCodes('&', prefix + str));
-                return true;
-
-            } else if (args[0].equalsIgnoreCase("reload")) {
-                if (!p.hasPermission("simplead.reload")) {
-                    Utils.sendNoAccess(p);
-                    Utils.logToFile(format.format(date) + " - " + "Reload > " + sender.getName() + " tried to reload but didn't have permission");
-                    return true;
-                }
-
-                if (args.length != 1) {
-                    return true;
-                }
-
-                plugin.getPluginLoader().disablePlugin(plugin);
-                plugin.getPluginLoader().enablePlugin(plugin);
-                plugin.saveDefaultConfig();
-                plugin.reloadConfig();
-
-
-                Main.reloadFiles();
-
-                plugin.saveConfig();
-
-                p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&f&l(&cAdvertising&f&l) &fSuccesfully reloaded."));
-
-                Utils.logToFile(format.format(date) + " - " + "Reload > " + sender.getName() + " has reloaded the plugin.");
-                Utils.sendSound(p);
-
-                return true;
-            }
-
             if (plugin.getConfig().getString("advertising.economy").equalsIgnoreCase("money")) {
 
                 if (Bukkit.getPluginManager().getPlugin("Vault") == null) {
@@ -438,25 +358,5 @@ public class Advertising implements CommandExecutor {
         return true;
     }
 
-    private static final String HEADER = "&8&l&m-----------------------------";
-    private static final String EMPTY = "";
-    public static void sendServerInfo(Player player) {
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-
-            PluginDescriptionFile pdf = plugin.getDescription();
-
-            player.sendMessage(EMPTY);
-            player.sendMessage(Utils.color(HEADER));
-            player.sendMessage(Utils.color("&aServer name: &7" + Bukkit.getServer().getName()));
-            player.sendMessage(Utils.color("&aGamemode: &7" + Bukkit.getDefaultGameMode()));
-            player.sendMessage(Utils.color("&aVersion: &7" + Bukkit.getVersion().replace("-SNAPSHOT", "")));
-            player.sendMessage(Utils.color("&aPlayers: &7" + Bukkit.getOnlinePlayers().size() + "/" + Bukkit.getMaxPlayers()));
-            player.sendMessage(Utils.color("&aPlugins &8(&7" + Bukkit.getPluginManager().getPlugins().length + "&8) "));
-            player.sendMessage(Utils.color("&aPlugin Version: &7" + pdf.getVersion()));
-            player.sendMessage(Utils.color("&aDependencies: &7" + plugin.hasDependencies()));
-            player.sendMessage(Utils.color(HEADER));
-            player.sendMessage(EMPTY);
-        });
-    }
 
 }
