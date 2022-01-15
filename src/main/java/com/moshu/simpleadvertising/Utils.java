@@ -232,17 +232,12 @@ public class Utils {
                     saveTo.createNewFile();
                 }
 
-
-                FileWriter fw = new FileWriter(saveTo, true);
-
-                PrintWriter pw = new PrintWriter(fw);
-
-                pw.println(message);
-
-                pw.flush();
-
-                pw.close();
-
+                try (FileWriter fw = new FileWriter(saveTo, true)){
+                    try (PrintWriter pw = new PrintWriter(fw)){
+                        pw.println(message);
+                        pw.flush();
+                    }
+                }
             } catch (IOException e) {
 
                 e.printStackTrace();
